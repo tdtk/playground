@@ -31,4 +31,6 @@ export const enMessage: { [key: string]: (log: ErrorLog) => string } = {
   RequiredArguments: (_log: ErrorLog) =>
     `RequiredArguments: arguments are required`,
   CompileError: (log: ErrorLog) => `CompileError: ${log.subject}`,
+  NLPSymbol: (log: ErrorLog) =>
+    `NLPSymbol: This was interpreted as NLPSymbol ${log.subject}`,
 };

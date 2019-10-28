@@ -59,6 +59,35 @@ monacoEditor.languages.registerCodeActionProvider('python', {
           }
           break;
         }
+        case 'NLPSymbol': {
+          const NLPSymbol = mk.source;
+          if (NLPSymbol) {
+            codeActions.push(
+              callKoinu(NLPSymbol).then(json => {
+                const key = Object.keys(json)[0];
+                return {
+                  title: `もしかして「${json[key]}」ですか？`,
+                  edit: {
+                    edits: [
+                      {
+                        edits: [
+                          {
+                            range,
+                            text: json[key],
+                          },
+                        ],
+                        resource: model.uri,
+                      },
+                    ],
+                  },
+                  kind: 'quickfix',
+                  isPreferred: true,
+                };
+              })
+            );
+          }
+          break;
+        }
         default:
           break;
       }

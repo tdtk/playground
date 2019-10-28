@@ -1361,6 +1361,14 @@ class Transpiler {
     return tVoid;
   }
 
+  public NLPSymbol(env: Env, t: any, out: string[]) {
+    env.perror(t, {
+      type: 'error',
+      key: 'NLPSymbol',
+      subject: t.tokenize(),
+    });
+  }
+
   public Name(env: Env, t: any, out: string[]) {
     const name = t.tokenize();
     const symbol = env.get(name) as Symbol;
