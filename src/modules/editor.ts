@@ -122,6 +122,8 @@ export const setMarker = (markers: ErrorLog[]): SetMarkerAction => ({
       startColumn: marker.col!,
       endLineNumber: marker.row! + 1,
       endColumn: marker.col! + marker.len!,
+      code: marker.key,
+      source: marker.subject ? marker.subject : '',
       message: enMessage[marker.key](marker),
     })),
   },

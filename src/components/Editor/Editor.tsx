@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 import { CodeEditor } from '../../modules/editor';
+import { callKoinu } from '../../modules/operations';
 
 monacoEditor.editor.defineTheme('error', {
   base: 'vs',
@@ -19,41 +20,52 @@ monacoEditor.editor.defineTheme('error', {
   },
 });
 
-// monacoEditor.languages.registerCodeActionProvider('python', {
-//   provideCodeActions: (
-//     model: monacoEditor.editor.ITextModel,
-//     range: monacoEditor.Range,
-//     context: monacoEditor.languages.CodeActionContext,
-//     token: monacoEditor.CancellationToken
-//   ) => {
-//     console.log(context);
-//     const workSpaceEdit: monacoEditor.languages.WorkspaceEdit = {
-//       edits: [
-//         {
-//           edits: [
-//             {
-//               range,
-//               text: 'test',
-//             },
-//           ],
-//           resource: model.uri,
-//         },
-//       ],
-//     };
-//     const codeActions: monacoEditor.languages.CodeAction[] = [
-//       {
-//         title: 'Test',
-//         edit: workSpaceEdit,
-//         command: { id: '001', title: 'test' },
-//         diagnostics: [],
-//         kind: 'quickfix',
-//         isPreferred: true,
-//       },
-//     ];
-//     console.log(codeActions);
-//     return codeActions;
-//   },
-// });
+monacoEditor.languages.registerCodeActionProvider('python', {
+  provideCodeActions: (
+    model: monacoEditor.editor.ITextModel,
+    range: monacoEditor.Range,
+    context: monacoEditor.languages.CodeActionContext,
+    token: monacoEditor.CancellationToken
+  ) => {
+    const codeActions: Promise<monacoEditor.languages.CodeAction>[] = [];
+    for (const mk of context.markers) {
+      switch (mk.code) {
+        case 'UnknownName': {
+          const NLPSymbol = mk.source;
+          if (NLPSymbol) {
+            codeActions.push(
+              callKoinu(NLPSymbol).then(json => {
+                const key = Object.keys(json)[0];
+                return {
+                  title: `もしかして「${json[key]}」ですか？`,
+                  edit: {
+                    edits: [
+                      {
+                        edits: [
+                          {
+                            range,
+                            text: json[key],
+                          },
+                        ],
+                        resource: model.uri,
+                      },
+                    ],
+                  },
+                  kind: 'quickfix',
+                  isPreferred: true,
+                };
+              })
+            );
+          }
+          break;
+        }
+        default:
+          break;
+      }
+    }
+    return Promise.all(codeActions);
+  },
+});
 
 monacoEditor.languages.registerCompletionItemProvider('python', {
   provideCompletionItems: (
@@ -317,9 +329,6 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
       }, 300);
     }
   };
-  const hoge: string = 'piyo';
-
-  hoge.startsWith('hoge');
 
   const editorDidMount = (editor: CodeEditor) => {
     props.setCodeEditor(editor);
