@@ -18,15 +18,18 @@ const Input: React.FC<InputProps> = (props: InputProps) => {
   return (
     <Modal size="lg" show={props.show} centered>
       <Modal.Body>
-        <Form id="puppy-input-form" onSubmit={e => {
-          props.setShow(false);
-          if(e.preventDefault){
-            e.preventDefault();
-          } else if(e.returnValue){
-            e.returnValue = false;
-          }
-          return false;
-          }}>
+        <Form
+          id="puppy-input-form"
+          onSubmit={e => {
+            props.setShow(false);
+            if (e.preventDefault) {
+              e.preventDefault();
+            } else if (e.returnValue) {
+              e.returnValue = false;
+            }
+            return false;
+          }}
+        >
           <InputGroup className="mb-3">
             <FormControl
               placeholder={props.placeholder}
