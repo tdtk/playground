@@ -4,7 +4,7 @@ import { setPuppy, setShowTLIcon } from './puppy';
 import { setPlaceholder, setShow } from './input';
 import { PuppyCode, Puppy, runPuppy, ErrorLog } from '../vm/vm';
 import store, { ReduxActions } from '../store';
-import { compile } from '../puppy-transpiler/puppy';
+import { compile } from 'puppy-transpiler';
 
 import { Range } from 'monaco-editor';
 
@@ -242,10 +242,10 @@ export const fetchCourses = (
 };
 
 export const callKoinu = (NLPSymbol: string) =>
-  fetch(`http://localhost:8888/api/nlp/${NLPSymbol}`, { method: 'POST' }).then(
-    (res: Response) => {
-      if (res.ok) {
-        return res.json();
-      }
+  fetch(`http://localhost:8888/api/option/${NLPSymbol}`, {
+    method: 'POST',
+  }).then((res: Response) => {
+    if (res.ok) {
+      return res.json();
     }
-  );
+  });
