@@ -10,8 +10,8 @@ import {
   showTimeLeapIcon,
 } from '../modules/operations';
 import { chooseColorScheme } from './color';
-import { Lib } from '../puppy-transpiler/puppy-lib';
-import { Type } from '../puppy-transpiler/puppy';
+import { Lib } from 'puppy-transpiler';
+import { Type } from 'puppy-transpiler';
 
 // const Bodies = Matter.Bodies;
 const Engine = Matter.Engine;

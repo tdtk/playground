@@ -4,7 +4,7 @@ import { setPuppy, setShowTLIcon } from './puppy';
 import { setPlaceholder, setShow } from './input';
 import { PuppyCode, Puppy, runPuppy, ErrorLog } from '../vm/vm';
 import store, { ReduxActions } from '../store';
-import { compile } from '../puppy-transpiler/puppy';
+import { compile } from 'puppy-transpiler';
 
 import { Range } from 'monaco-editor';
 
