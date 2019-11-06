@@ -1,4 +1,10 @@
-import { setTheme, setCode, setMarker, setDecoration } from './editor';
+import {
+  setTheme,
+  setCode,
+  setMarker,
+  appendMarker,
+  setDecoration,
+} from './editor';
 import { CourseShape, setCourse, setContent, setCources } from './course';
 import { setPuppy, setShowTLIcon } from './puppy';
 import { setPlaceholder, setShow } from './input';
@@ -37,6 +43,10 @@ import { PATH_PREFIX } from '../env';
 //   return true;
 // };
 
+const setLog = event => {
+  store.dispatch(appendMarker([event]));
+};
+
 export const trancepile = (dispatch: (action: ReduxActions) => void) => (
   _puppy: Puppy | null,
   source: string,
@@ -47,10 +57,18 @@ export const trancepile = (dispatch: (action: ReduxActions) => void) => (
   let puppy = _puppy;
   if (!puppy) {
     puppy = new Puppy(document.getElementById('puppy-screen')!, {});
+    puppy.addEventListener('error', setLog);
+    puppy.addEventListener('warning', setLog);
+    puppy.addEventListener('info', setLog);
     dispatch(setPuppy(puppy));
   }
-  puppy.load(source);
-  puppy.start();
+  dispatch(setMarker([]));
+  if (puppy.load(source)) {
+    dispatch(setTheme('vs'));
+    puppy.start();
+  } else {
+    dispatch(setTheme('error'));
+  }
   // if (!checkError(dispatch, code)) {
   //   // if (isLive && puppy && puppy!.getCode().hash === code.hash) {
   //   //   return puppy;
@@ -219,7 +237,7 @@ export const fetchCourses = (
 ) => (): void => {
   const courses: { [path: string]: CourseShape } = {};
   const get_course: Promise<void>[] = [];
-  ['LIVE2019'].forEach(path => {
+  ['NLP'].forEach(path => {
     get_course.push(
       loadFile(`${PATH_PREFIX}/course/${path}/setting.json`)
         .then((s: string) => {

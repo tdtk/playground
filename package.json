@@ -63,7 +63,7 @@
     "postcss-safe-parser": "4.0.1",
     "prettier": "^1.18.2",
     "puppy-transpiler": "^1.0.5",
-    "puppy2d": "^1.0.2",
+    "puppy2d": "^1.0.6",
     "react": "^16.8.6",
     "react-app-polyfill": "^1.0.1",
     "react-bootstrap": "^1.0.0-beta.10",

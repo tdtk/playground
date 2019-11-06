@@ -2,7 +2,6 @@ import { Action } from 'redux';
 import * as monacoEditor from 'monaco-editor';
 export type CodeEditor = monacoEditor.editor.IStandaloneCodeEditor;
 import { ErrorLog } from 'puppy2d';
-import { enMessage } from 'puppy-transpiler';
 
 enum EditorActionTypes {
   SET_SIZE = 'SET_SIZE',
@@ -11,6 +10,7 @@ enum EditorActionTypes {
   SET_FONTSIZE = 'SET_FONTSIZE',
   SET_DECORATION = 'SET_DECORATION',
   SET_MARKER = 'SET_MARKER',
+  APPEND_MARKER = 'APPEND_MARKER',
   SET_THEME = 'SETTHEME',
   SET_DIFFSTARTLINENUMBER = 'SET_DIFFSTARTLINENUMBER',
 }
@@ -124,7 +124,34 @@ export const setMarker = (markers: ErrorLog[]): SetMarkerAction => ({
       endColumn: marker.col! + marker.len!,
       code: marker.key,
       source: marker.subject ? marker.subject : '',
-      message: enMessage[marker.key](marker),
+      message: marker.key,
+    })),
+  },
+});
+
+interface AppendMarkerAction extends Action {
+  type: EditorActionTypes.APPEND_MARKER;
+  payload: {
+    markers: monacoEditor.editor.IMarkerData[];
+  };
+}
+
+export const appendMarker = (markers: ErrorLog[]): AppendMarkerAction => ({
+  type: EditorActionTypes.APPEND_MARKER,
+  payload: {
+    markers: markers.map(marker => ({
+      severity: type2severity(marker.type as
+        | 'error'
+        | 'info'
+        | 'warning'
+        | 'hint'),
+      startLineNumber: marker.row! + 1,
+      startColumn: marker.col!,
+      endLineNumber: marker.row! + 1,
+      endColumn: marker.col! + marker.len!,
+      code: marker.key,
+      source: marker.subject ? marker.subject : '',
+      message: marker.key,
     })),
   },
 });
@@ -164,6 +191,7 @@ export type EditorActions =
   | SetFontSizeAction
   | SetDecorationAction
   | SetMarkerAction
+  | AppendMarkerAction
   | SetThemeAction
   | SetDiffStartLineNumber;
 
@@ -212,6 +240,17 @@ export const editorReducer = (state = initialState, action: EditorActions) => {
         state.codeEditor!.getModel()!,
         'puppy',
         action.payload.markers
+      );
+      return {
+        ...state,
+        codeEditor: state.codeEditor,
+        markers: action.payload.markers,
+      };
+    case EditorActionTypes.APPEND_MARKER:
+      monacoEditor.editor.setModelMarkers(
+        state.codeEditor!.getModel()!,
+        'puppy',
+        state.markers.concat(action.payload.markers)
       );
       return {
         ...state,

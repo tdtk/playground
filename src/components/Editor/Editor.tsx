@@ -30,50 +30,32 @@ monacoEditor.languages.registerCodeActionProvider('python', {
     const codeActions: Promise<monacoEditor.languages.CodeAction>[] = [];
     for (const mk of context.markers) {
       switch (mk.code) {
-        case 'UnknownName': {
+        case 'NLKeyValues': {
           const NLPSymbol = mk.source;
           if (NLPSymbol) {
             codeActions.push(
               callKoinu(NLPSymbol).then(json => {
+                console.log(json);
                 const key = Object.keys(json)[0];
+                let text = '';
+                if (key == 'shape') {
+                  text = json[key];
+                } else if (key == 'color') {
+                  text = `fillStyle="${json[key]}"`;
+                } else {
+                  text = `${key}=${
+                    typeof json[key] == 'string' ? `"${json[key]}"` : json[key]
+                  }`;
+                }
                 return {
-                  title: `もしかして「${json[key]}」ですか？`,
+                  title: `もしかして「${text}」ですか？`,
                   edit: {
                     edits: [
                       {
                         edits: [
                           {
                             range,
-                            text: json[key],
-                          },
-                        ],
-                        resource: model.uri,
-                      },
-                    ],
-                  },
-                  kind: 'quickfix',
-                  isPreferred: true,
-                };
-              })
-            );
-          }
-          break;
-        }
-        case 'NLPSymbol': {
-          const NLPSymbol = mk.source;
-          if (NLPSymbol) {
-            codeActions.push(
-              callKoinu(NLPSymbol).then(json => {
-                const key = Object.keys(json)[0];
-                return {
-                  title: `もしかして「${json[key]}」ですか？`,
-                  edit: {
-                    edits: [
-                      {
-                        edits: [
-                          {
-                            range,
-                            text: json[key],
+                            text,
                           },
                         ],
                         resource: model.uri,
@@ -339,23 +321,24 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
       //   );
       // }, 1500);
       trancepileTimer = setTimeout(() => {
-        (puppy => {
-          if (startTimer) {
-            clearTimeout(startTimer);
-            startTimer = null;
-          }
-          startTimer = setTimeout(() => {
-            if (puppy) {
-              puppy.start();
-            }
-            props.setDiffStartLineNumber(null);
-          }, 1500);
-        })(props.trancepile(props.puppy, new_code, false, true, true));
+        // (puppy => {
+        //   if (startTimer) {
+        //     clearTimeout(startTimer);
+        //     startTimer = null;
+        //   }
+        //   startTimer = setTimeout(() => {
+        //     if (puppy) {
+        //       puppy.start();
+        //     }
+        //     props.setDiffStartLineNumber(null);
+        //   }, 1500);
+        // })(props.trancepile(props.puppy, new_code, false, true, true));
+        props.trancepile(props.puppy, new_code, false, true, true);
         window.sessionStorage.setItem(
           `/api/sample/${props.coursePath}/${props.page}`,
           new_code
         );
-      }, 300);
+      }, 1000);
     }
   };
 
