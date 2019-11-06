@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import * as monacoEditor from 'monaco-editor';
 export type CodeEditor = monacoEditor.editor.IStandaloneCodeEditor;
-import { ErrorLog } from '../vm/vm';
+import { ErrorLog } from 'puppy2d';
 import { enMessage } from 'puppy-transpiler';
 
 enum EditorActionTypes {

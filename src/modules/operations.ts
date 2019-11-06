@@ -2,64 +2,66 @@ import { setTheme, setCode, setMarker, setDecoration } from './editor';
 import { CourseShape, setCourse, setContent, setCources } from './course';
 import { setPuppy, setShowTLIcon } from './puppy';
 import { setPlaceholder, setShow } from './input';
-import { PuppyCode, Puppy, runPuppy, ErrorLog } from '../vm/vm';
 import store, { ReduxActions } from '../store';
-import { compile } from 'puppy-transpiler';
+import { Puppy, ErrorLog } from 'puppy2d';
 
 import { Range } from 'monaco-editor';
 
 import { PATH_PREFIX } from '../env';
 
-const checkError = (
-  dispatch: (action: ReduxActions) => void,
-  code: PuppyCode
-) => {
-  let error_count = 0;
-  const annos: ErrorLog[] = [];
-  // editor.getSession().clearAnnotations();
-  for (const e of code.errors) {
-    if (e.type === 'error') {
-      error_count += 1;
-    }
-    // ignore info
-    if (e.type === 'info') {
-      continue;
-    }
-    annos.push(e);
-    // editor.getSession().setAnnotations(annos);
-  }
-  dispatch(setMarker(annos));
-  if (error_count === 0) {
-    dispatch(setTheme('vs'));
-    return false;
-  }
-  dispatch(setTheme('error'));
-  // editorPanel.style.backgroundColor = 'rgba(254,244,244,0.7)';
-  return true;
-};
-
-let new_puppy: Puppy | null = null;
+// const checkError = (
+//   dispatch: (action: ReduxActions) => void,
+//   code: PuppyCode
+// ) => {
+//   let error_count = 0;
+//   const annos: ErrorLog[] = [];
+//   // editor.getSession().clearAnnotations();
+//   for (const e of code.errors) {
+//     if (e.type === 'error') {
+//       error_count += 1;
+//     }
+//     // ignore info
+//     if (e.type === 'info') {
+//       continue;
+//     }
+//     annos.push(e);
+//     // editor.getSession().setAnnotations(annos);
+//   }
+//   dispatch(setMarker(annos));
+//   if (error_count === 0) {
+//     dispatch(setTheme('vs'));
+//     return false;
+//   }
+//   dispatch(setTheme('error'));
+//   // editorPanel.style.backgroundColor = 'rgba(254,244,244,0.7)';
+//   return true;
+// };
 
 export const trancepile = (dispatch: (action: ReduxActions) => void) => (
-  puppy: Puppy | null,
+  _puppy: Puppy | null,
   source: string,
   alwaysRun: boolean,
   waitStart = false,
   _isLive = false
 ): Puppy | null => {
-  const code = compile({ source }) as PuppyCode; // Eval javascript code
-  console.log(code);
-  if (!checkError(dispatch, code)) {
-    // if (isLive && puppy && puppy!.getCode().hash === code.hash) {
-    //   return puppy;
-    // }
-    if (new_puppy) {
-      new_puppy.dispose();
-    }
-    new_puppy = runPuppy(puppy!, code, alwaysRun, waitStart);
-    dispatch(setPuppy(new_puppy));
+  let puppy = _puppy;
+  if (!puppy) {
+    puppy = new Puppy(document.getElementById('puppy-screen')!, {});
+    dispatch(setPuppy(puppy));
   }
-  return new_puppy;
+  puppy.load(source);
+  puppy.start();
+  // if (!checkError(dispatch, code)) {
+  //   // if (isLive && puppy && puppy!.getCode().hash === code.hash) {
+  //   //   return puppy;
+  //   // }
+  //   if (new_puppy) {
+  //     new_puppy.dispose();
+  //   }
+  //   new_puppy = runPuppy(puppy!, code, alwaysRun, waitStart);
+  //   dispatch(setPuppy(new_puppy));
+  // }
+  return puppy;
 };
 
 // export const trancepile = (dispatch: (action: ReduxActions) => void) => (

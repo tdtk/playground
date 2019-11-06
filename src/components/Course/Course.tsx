@@ -8,7 +8,7 @@ import {
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Puppy } from '../../vm/vm';
+import { Puppy } from 'puppy2d';
 
 import { CourseShape } from '../../modules/course';
 

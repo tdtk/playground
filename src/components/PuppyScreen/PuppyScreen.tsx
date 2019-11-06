@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Puppy } from '../../vm/vm';
+import { Puppy } from 'puppy2d';
 import { Button } from 'react-bootstrap';
 import './PuppyScreen.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,7 +23,7 @@ type PuppyFooterProps = {
 const PuppyFooter: React.FC<PuppyFooterProps> = (props: PuppyFooterProps) => {
   const fullscreen = () => {
     if (props.puppy != null) {
-      const canvas = props.puppy.getCanvas();
+      const canvas = props.puppy.render!.canvas;
       if (canvas) {
         // FIXME
         if (canvas['webkitRequestFullscreen']) {
@@ -79,9 +79,9 @@ const PuppyScreen: React.FC<PuppyScreenProps> = (props: PuppyScreenProps) => {
   });
 
   const get_color = (puppy: Puppy | null) => {
-    if (puppy && puppy.world) {
-      return puppy.world.colorScheme[0];
-    }
+    // if (puppy && puppy.world) {
+    //   return puppy.world.colorScheme[0];
+    // }
     return 'gray';
   };
 
