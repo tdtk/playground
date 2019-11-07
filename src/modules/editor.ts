@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 import * as monacoEditor from 'monaco-editor';
 export type CodeEditor = monacoEditor.editor.IStandaloneCodeEditor;
-import { ErrorLog } from 'puppy2d';
+import { ErrorLog } from '@playpuppy/puppy2d';
 
 enum EditorActionTypes {
   SET_SIZE = 'SET_SIZE',

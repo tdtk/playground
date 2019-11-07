@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Puppy } from 'puppy2d';
+import { Puppy } from '@playpuppy/puppy2d';
 import { Button } from 'react-bootstrap';
 import './PuppyScreen.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

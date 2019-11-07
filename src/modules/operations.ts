@@ -9,7 +9,7 @@ import { CourseShape, setCourse, setContent, setCources } from './course';
 import { setPuppy, setShowTLIcon } from './puppy';
 import { setPlaceholder, setShow } from './input';
 import store, { ReduxActions } from '../store';
-import { Puppy, ErrorLog } from 'puppy2d';
+import { Puppy, ErrorLog } from '@playpuppy/puppy2d';
 
 import { Range } from 'monaco-editor';
 

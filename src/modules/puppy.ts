@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { Puppy } from 'puppy2d';
+import { Puppy } from '@playpuppy/puppy2d';
 
 enum PuppyActionTypes {
   SET_SIZE = 'SET_SIZE',
