@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 import './index.css';
 import App from './App';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { store } from './store';
 
 export type QueryParams = {
   course?: string;
@@ -21,17 +19,15 @@ const queryParser = (query: string) =>
     }, {});
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <Route
-        render={props => (
-          <App
-            qs={queryParser(props.location.search)}
-            hash={props.location.hash}
-          />
-        )}
-      />
-    </Router>
-  </Provider>,
+  <Router>
+    <Route
+      render={props => (
+        <App
+          qs={queryParser(props.location.search)}
+          hash={props.location.hash}
+        />
+      )}
+    />
+  </Router>,
   document.getElementById('root')
 );

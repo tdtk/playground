@@ -5,12 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronRight,
   faChevronLeft,
-  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
-
-import { Puppy } from '@playpuppy/puppy2d';
-
-import { CourseShape } from '../../modules/course';
+import { CourseShape } from '../../logic/course';
 
 import './Course.css';
 import './github-markdown.css';
@@ -18,21 +14,12 @@ import './github-markdown.css';
 type CourseProps = {
   course: CourseShape;
   coursePath: string;
-  puppy: Puppy | null;
   page: number;
   content: string;
   visible: boolean;
-  setVisible: (visible: boolean) => void;
-  setCode: (code: string) => void;
-  setContent: (content: string) => void;
-  setCourse: (course: CourseShape) => void;
+  play: (source: string) => () => void;
   fetchContent: (coursePath: string, path: string) => void;
-  fetchSample: (
-    puppy: Puppy | null,
-    coursePath: string,
-    page: number,
-    path: string
-  ) => void;
+  fetchSample: (coursePath: string, path: string) => Promise<string>;
   fetchSetting: (coursePath: string) => void;
 };
 
@@ -40,12 +27,11 @@ const Course: React.FC<CourseProps> = (props: CourseProps) => {
   useEffect(() => {
     if (props.course.list.length !== 0) {
       props.fetchContent(props.coursePath, props.course.list[props.page].path);
-      props.fetchSample(
-        props.puppy,
-        props.coursePath,
-        props.page,
-        props.course.list[props.page].path
-      );
+      props
+        .fetchSample(props.coursePath, props.course.list[props.page].path)
+        .then((source: string) => {
+          props.play(source)();
+        });
     }
   }, [props.page, props.coursePath, props.course]);
 

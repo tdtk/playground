@@ -1,23 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { CourseShape } from '../../modules/course';
+import { CourseShape } from '../../logic/course';
 import './Header.css';
 
 export type HeaderProps = {
-  course: CourseShape;
   courses: { [path: string]: CourseShape };
-  fetchCourses: () => void;
-  setShow: (show: boolean) => void;
+  setIsShowVersion: (isShow: boolean) => void;
 };
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
-  useEffect(() => {
-    props.fetchCourses();
-  }, []);
   return (
     <div className="Header" id="puppy-header">
       <Navbar bg="white" variant="light" expand="lg">
-        <Navbar.Brand onClick={() => props.setShow(true)}>
+        <Navbar.Brand onClick={() => props.setIsShowVersion(true)}>
           <img
             src="./image/logo.png"
             width="25"
