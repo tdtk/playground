@@ -24,14 +24,14 @@
   },
   "rules": {
     "no-console": "off",
-    "no-unused-vars": "warn",
-    // "@typescript-eslint/no-unused-vars": [
-    //   "error",
-    //   {
-    //     "varsIgnorePattern": "^_",
-    //     "argsIgnorePattern": "^_"
-    //   }
-    // ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ],
     "prettier/prettier": [
       "error",
       {
