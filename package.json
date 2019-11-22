@@ -86,7 +86,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build --remote upstream",
     "lint": "eslint './src/**/*.{ts,tsx}'",
     "lint:fix": "eslint --fix './src/**/*.{ts,tsx}'"
   },
@@ -160,5 +161,5 @@
       "react-app"
     ]
   },
-  "homepage": "http://playpuppy.github.io/LIVE2019"
+  "homepage": "http://playpuppy.github.io/playground"
 }
