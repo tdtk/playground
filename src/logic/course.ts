@@ -9,7 +9,7 @@ export type CourseShape = {
 export type Courses = { [path: string]: CourseShape };
 
 export const loadFile: (path: string) => Promise<string> = path => {
-  return fetch(`${process.env['PUBLIC_URL']}/${path}`, {
+  return fetch(`${process.env['PUBLIC_URL']}${path}`, {
     method: 'GET',
   })
     .then((res: Response) => {
