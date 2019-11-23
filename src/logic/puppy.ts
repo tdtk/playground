@@ -11,8 +11,9 @@ export const resize = (puppy: Puppy | null) => {
 export const play = (puppy: Puppy | null) => (source: string) => () => {
   if (puppy && puppy.load(source)) {
     puppy.start();
+    return true;
   } else {
-    // Load Failer
+    return false;
   }
 };
 

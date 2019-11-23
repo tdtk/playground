@@ -16,7 +16,7 @@ import {
   fetchSetting,
 } from './logic/course';
 import { Puppy } from '@playpuppy/puppy2d';
-import { play, fullscreen, resize } from './logic/puppy';
+import { play as puppyplay, fullscreen, resize } from './logic/puppy';
 import {
   onChange,
   editorDidMount,
@@ -37,10 +37,18 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   const [courseContent, setCourseContent] = useState('');
   const [puppy, setPuppy] = useState(null as Puppy | null);
   const [source, setSource] = useState('');
-  const [editorTheme, _setEditorTheme] = useState('vs');
+  const [editorTheme, setEditorTheme] = useState('vs');
   const [editorFontSize, setEditorFontSize] = useState(24);
   const [codeEditor, setCodeEditor] = useState(null as CodeEditor | null);
   const [decos, setDecos] = useState([] as string[]);
+
+  const play = (puppy: Puppy | null) => (source: string) => () => {
+    if (puppyplay(puppy)(source)()) {
+      setEditorTheme('vs');
+    } else {
+      setEditorTheme('error');
+    }
+  };
 
   useEffect(() => {
     fetchCourses(setCourses);
