@@ -23,6 +23,7 @@ import {
   fontMinus,
   fontPlus,
   CodeEditor,
+  setErrorLogs,
 } from './logic/editor';
 import {
   openSetting,
@@ -72,13 +73,17 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     if (puppyElement) {
       const puppyOS = new PuppyOS();
       const puppy = puppyOS.newPuppyVM(puppyElement);
-      // puppy.addEventListener('error', setLog);
-      // puppy.addEventListener('warning', setLog);
-      // puppy.addEventListener('info', setLog);
       setPuppy(puppy);
     }
     initSetting(setSetting);
   }, []);
+  useEffect(() => {
+    if (puppy) {
+      puppy.addEventListener('error', setErrorLogs(codeEditor)('error'));
+      puppy.addEventListener('warning', setErrorLogs(codeEditor)('warning'));
+      puppy.addEventListener('info', setErrorLogs(codeEditor)('info'));
+    }
+  }, [puppy, codeEditor]);
   return (
     <div className="App">
       <Container className="container">

@@ -4,8 +4,10 @@ import {
   Range,
   CancellationToken,
   Position,
+  MarkerSeverity,
 } from 'monaco-editor';
 import { callKoinu } from './koinu';
+import { ErrorLog } from '@playpuppy/puppy2d';
 
 export type CodeEditor = editor.IStandaloneCodeEditor;
 export type ContentChangedEvent = editor.IModelContentChangedEvent;
@@ -225,4 +227,43 @@ export const fontMinus = (
   setFontSize: (fontSize: number) => void
 ) => () => {
   setFontSize(Math.max(12, fontSize - 3));
+};
+
+export const setModelMarkers = editor.setModelMarkers;
+
+type LogType = 'error' | 'info' | 'warning' | 'hint';
+
+const type2severity = (type: LogType) => {
+  switch (type) {
+    case 'error':
+      return MarkerSeverity.Error;
+    case 'info':
+      return MarkerSeverity.Info;
+    case 'warning':
+      return MarkerSeverity.Warning;
+    case 'hint':
+      return MarkerSeverity.Hint;
+  }
+};
+
+export const ErrorLogs2Markers = (logs: ErrorLog[]): editor.IMarkerData[] =>
+  logs.map(log => ({
+    severity: type2severity(log.type as LogType),
+    startLineNumber: log.row + 1,
+    startColumn: log.col!,
+    endLineNumber: log.row! + 1,
+    endColumn: log.col! + log.len!,
+    code: log.key,
+    source: log.subject ? log.subject : '',
+    message: log.key,
+  }));
+
+export const setErrorLogs = (codeEditor: CodeEditor | null) => (
+  type: LogType
+) => (logs: ErrorLog[]) => {
+  console.log(codeEditor);
+  if (codeEditor) {
+    console.log(codeEditor.getModel()!);
+    setModelMarkers(codeEditor.getModel()!, type, ErrorLogs2Markers(logs));
+  }
 };
