@@ -7,6 +7,7 @@ import {
   faExpand,
   faBookOpen,
   faBook,
+  faTerminal,
 } from '@fortawesome/free-solid-svg-icons';
 
 type PuppyFooterProps = {
@@ -28,6 +29,13 @@ const PuppyFooter: React.FC<PuppyFooterProps> = (props: PuppyFooterProps) => {
       </Button>
       <Button onClick={() => props.setIsCourseVisible(!props.isCourseVisible)}>
         <FontAwesomeIcon icon={props.isCourseVisible ? faBookOpen : faBook} />
+      </Button>
+      <Button style={{ paddingRight: '1em', paddingLeft: '0.4em' }}>
+        <FontAwesomeIcon
+          size={'xs'}
+          icon={faTerminal}
+          style={{ verticalAlign: 'top' }}
+        />
       </Button>
     </div>
   );

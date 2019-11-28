@@ -1,4 +1,4 @@
-import { Puppy } from '@playpuppy/puppy2d';
+import { PuppyVM as Puppy } from '@playpuppy/puppy2d';
 
 export const resize = (puppy: Puppy | null) => {
   if (puppy) {
