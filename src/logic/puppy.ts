@@ -1,10 +1,10 @@
 import { PuppyVM as Puppy } from '@playpuppy/puppy2d';
 
-export const resize = (puppy: Puppy | null) => {
+export const resize = (puppy: Puppy | null) => (w: number, h: number) => {
   if (puppy) {
-    return puppy.resize;
+    return puppy.resize(w, h);
   } else {
-    return (_w: number, _h: number) => {};
+    return;
   }
 };
 
