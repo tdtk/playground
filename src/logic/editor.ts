@@ -7,7 +7,7 @@ import {
   MarkerSeverity,
 } from 'monaco-editor';
 import { callKoinu } from './koinu';
-import { ErrorLog } from '@playpuppy/puppy2d';
+import { ErrorLog, PuppyVM } from '@playpuppy/puppy2d';
 
 export type CodeEditor = editor.IStandaloneCodeEditor;
 export type ContentChangedEvent = editor.IModelContentChangedEvent;
@@ -201,12 +201,16 @@ export const onChange = (
   codeEditor: CodeEditor | null,
   setSource: (source: string) => void,
   decos: string[],
-  setDecos: (decos: string[]) => void
+  setDecos: (decos: string[]) => void,
+  puppy: PuppyVM | null
 ) => (source: string, _event: editor.IModelContentChangedEvent) => {
   if (codeEditor) {
     checkZenkaku(codeEditor, decos, setDecos);
   }
   setSource(source);
+  if (puppy) {
+    puppy.load(source, false);
+  }
 };
 
 export const editorDidMount = (setEditor: (editor: CodeEditor) => void) => (

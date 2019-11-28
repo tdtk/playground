@@ -128,7 +128,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               theme={editorTheme}
               source={source}
               lang={lang}
-              onChange={onChange(codeEditor, setSource, decos, setDecos)}
+              onChange={onChange(codeEditor, setSource, decos, setDecos, puppy)}
               editorDidMount={editorDidMount(setCodeEditor)}
               fontPlus={fontPlus(editorFontSize, setEditorFontSize)}
               fontMinus={fontMinus(editorFontSize, setEditorFontSize)}
