@@ -261,9 +261,7 @@ export const ErrorLogs2Markers = (logs: ErrorLog[]): editor.IMarkerData[] =>
 export const setErrorLogs = (codeEditor: CodeEditor | null) => (
   type: LogType
 ) => (logs: ErrorLog[]) => {
-  console.log(codeEditor);
   if (codeEditor) {
-    console.log(codeEditor.getModel()!);
     setModelMarkers(codeEditor.getModel()!, type, ErrorLogs2Markers(logs));
   }
 };
