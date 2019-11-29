@@ -54,14 +54,14 @@ const PuppyScreen: React.FC<PuppyScreenProps> = (props: PuppyScreenProps) => {
         setResizeTimer(null);
       }
       setResizeTimer(
-        setTimeout(function() {
+        setTimeout(() => {
           const w = document.getElementById('puppy-screen')!.clientWidth;
           const h = document.getElementById('puppy-screen')!.clientHeight;
           props.setSize(w, h);
         }, 300)
       );
     });
-  }, []);
+  }, [props.setSize]);
 
   return (
     <>
