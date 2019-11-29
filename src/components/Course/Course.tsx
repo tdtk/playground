@@ -21,13 +21,11 @@ type CourseProps = {
   fetchContent: (coursePath: string, path: string) => void;
   fetchSample: (coursePath: string, path: string) => Promise<string>;
   fetchSetting: (coursePath: string) => void;
-  closeSetting: () => void;
 };
 
 const Course: React.FC<CourseProps> = (props: CourseProps) => {
   useEffect(() => {
     if (props.course.list.length !== 0) {
-      props.closeSetting();
       props.fetchContent(props.coursePath, props.course.list[props.page].path);
       props
         .fetchSample(props.coursePath, props.course.list[props.page].path)

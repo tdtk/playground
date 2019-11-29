@@ -8,10 +8,8 @@ import './Header.css';
 
 export type HeaderProps = {
   courses: { [path: string]: CourseShape };
-  isSettingOpened: boolean;
   setIsShowVersion: (isShow: boolean) => void;
-  openSetting: () => void;
-  closeSetting: () => void;
+  setIsShowSetting: () => void;
 };
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
@@ -53,11 +51,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
             })}
           </NavDropdown>
         </Nav>
-        <Button
-          onClick={
-            props.isSettingOpened ? props.closeSetting : props.openSetting
-          }
-        >
+        <Button onClick={props.setIsShowSetting}>
           <FontAwesomeIcon icon={faCog} />
         </Button>
       </Navbar>

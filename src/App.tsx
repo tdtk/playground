@@ -3,6 +3,7 @@ import './App.css';
 import { Container, Row, Col } from 'react-bootstrap';
 import Header from './components/Header/Header';
 import Version from './components/Version/Version';
+import Setting from './components/Setting/Setting';
 import PuppyScreen from './components/PuppyScreen/PuppyScreen';
 import Editor from './components/Editor/Editor';
 import Course from './components/Course/Course';
@@ -25,11 +26,7 @@ import {
   CodeEditor,
   setErrorLogs,
 } from './logic/editor';
-import {
-  openSetting,
-  closeSetting as clSetting,
-  initSetting,
-} from './logic/setting';
+import { submitCommand } from './logic/setting';
 
 type AppProps = { qs: QueryParams; hash: string };
 
@@ -47,9 +44,8 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   const [editorFontSize, setEditorFontSize] = useState(24);
   const [codeEditor, setCodeEditor] = useState(null as CodeEditor | null);
   const [decos, setDecos] = useState([] as string[]);
-  const [isSettingOpened, setIsSettingOpened] = useState(false);
-  const [_setting, setSetting] = useState({} as JSON);
-  const [lang, setLang] = useState('python');
+  const [isShowSetting, setIsShowSetting] = useState(false);
+  const [settingCommand, setSettingCommand] = useState('');
 
   const play = (puppy: PuppyVM | null) => (source: string) => () => {
     if (puppyplay(puppy)(source)()) {
@@ -59,14 +55,6 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     }
   };
 
-  const closeSetting = clSetting(
-    setIsSettingOpened,
-    source,
-    setSource,
-    setSetting,
-    setLang
-  );
-
   useEffect(() => {
     fetchCourses(setCourses);
     const puppyElement = document.getElementById('puppy-screen');
@@ -75,7 +63,6 @@ const App: React.FC<AppProps> = (props: AppProps) => {
       const puppy = puppyOS.newPuppyVM(puppyElement);
       setPuppy(puppy);
     }
-    initSetting(setSetting);
   }, []);
   useEffect(() => {
     if (puppy) {
@@ -90,16 +77,16 @@ const App: React.FC<AppProps> = (props: AppProps) => {
         <Header
           courses={courses}
           setIsShowVersion={setIsShowVersion}
-          isSettingOpened={isSettingOpened}
-          openSetting={openSetting(
-            setIsSettingOpened,
-            source,
-            setSource,
-            setLang
-          )}
-          closeSetting={closeSetting}
+          setIsShowSetting={() => setIsShowSetting(true)}
         />
-        <Version setShow={setIsShowVersion} show={isShowVersion} />
+        <Version show={isShowVersion} setShow={setIsShowVersion} />
+        <Setting
+          show={isShowSetting}
+          setShow={setIsShowSetting}
+          value={settingCommand}
+          setValue={setSettingCommand}
+          submitValue={submitCommand(puppy)}
+        />
         <Row id="main-row">
           <Col id="left-col" xs={6}>
             <Course
@@ -112,7 +99,6 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               fetchContent={fetchContent(setCourseContent)}
               fetchSample={fetchSample(setSource)}
               fetchSetting={fetchSetting(setCourse)}
-              closeSetting={closeSetting}
             />
             <PuppyScreen
               isCourseVisible={isCourseVisible}
@@ -127,7 +113,6 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               fontSize={editorFontSize}
               theme={editorTheme}
               source={source}
-              lang={lang}
               onChange={onChange(codeEditor, setSource, decos, setDecos, puppy)}
               editorDidMount={editorDidMount(setCodeEditor)}
               fontPlus={fontPlus(editorFontSize, setEditorFontSize)}

@@ -31,7 +31,6 @@ export type EditorProps = {
   fontSize: number;
   theme: string;
   source: string;
-  lang: string;
   onChange: (source: string, event: ContentChangedEvent) => void;
   editorDidMount: (editor: CodeEditor) => void;
   fontPlus: () => void;
@@ -71,7 +70,7 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
       <MonacoEditor
         width={width}
         height={height}
-        language={props.lang}
+        language={'python'}
         theme={props.theme}
         value={props.source}
         options={editorOptions}
