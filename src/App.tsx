@@ -31,7 +31,7 @@ import { submitCommand } from './logic/setting';
 type AppProps = { qs: QueryParams; hash: string };
 
 const App: React.FC<AppProps> = (props: AppProps) => {
-  const coursePath = props.qs.course ? props.qs.course : 'LIVE2019';
+  const coursePath = props.qs.course ? props.qs.course : 'NLP';
   const page = props.hash !== '' ? parseInt(props.hash.substr(1)) : 0;
   const [courses, setCourses] = useState({} as Courses);
   const [isShowVersion, setIsShowVersion] = useState(false);
