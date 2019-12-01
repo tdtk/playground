@@ -173,6 +173,14 @@ languages.registerCompletionItemProvider('python', {
   },
 });
 
+languages.register({ id: 'puppyConsoleLanguage' });
+
+languages.setMonarchTokensProvider('puppyConsoleLanguage', {
+  tokenizer: {
+    root: [[/"[^"]*"/, 'string']],
+  },
+});
+
 const zenkaku =
   '[！　”＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［＼￥］＾＿‘｛｜｝～￣' +
   'ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ' +

@@ -51,8 +51,8 @@ const PuppyConsole: React.FC<PuppyConsoleProps> = (
       height={height}
       options={editorOptions}
       value={props.consoleValue}
-      language={'python'}
-      theme={'vs-dark'}
+      language={'puppyConsoleLanguage'}
+      theme={'vs'}
     />
   );
 };
