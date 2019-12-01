@@ -4,8 +4,10 @@ import {
   Range,
   CancellationToken,
   Position,
+  MarkerSeverity,
 } from 'monaco-editor';
 import { callKoinu } from './koinu';
+import { ErrorLog, PuppyVM } from '@playpuppy/puppy2d';
 
 export type CodeEditor = editor.IStandaloneCodeEditor;
 export type ContentChangedEvent = editor.IModelContentChangedEvent;
@@ -171,6 +173,14 @@ languages.registerCompletionItemProvider('python', {
   },
 });
 
+languages.register({ id: 'puppyConsoleLanguage' });
+
+languages.setMonarchTokensProvider('puppyConsoleLanguage', {
+  tokenizer: {
+    root: [[/"[^"]*"/, 'string']],
+  },
+});
+
 const zenkaku =
   '[！　”＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［＼￥］＾＿‘｛｜｝～￣' +
   'ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ' +
@@ -199,12 +209,16 @@ export const onChange = (
   codeEditor: CodeEditor | null,
   setSource: (source: string) => void,
   decos: string[],
-  setDecos: (decos: string[]) => void
+  setDecos: (decos: string[]) => void,
+  puppy: PuppyVM | null
 ) => (source: string, _event: editor.IModelContentChangedEvent) => {
   if (codeEditor) {
     checkZenkaku(codeEditor, decos, setDecos);
   }
   setSource(source);
+  if (puppy) {
+    puppy.load(source, false);
+  }
 };
 
 export const editorDidMount = (setEditor: (editor: CodeEditor) => void) => (
@@ -225,4 +239,41 @@ export const fontMinus = (
   setFontSize: (fontSize: number) => void
 ) => () => {
   setFontSize(Math.max(12, fontSize - 3));
+};
+
+export const setModelMarkers = editor.setModelMarkers;
+
+type LogType = 'error' | 'info' | 'warning' | 'hint';
+
+const type2severity = (type: LogType) => {
+  switch (type) {
+    case 'error':
+      return MarkerSeverity.Error;
+    case 'info':
+      return MarkerSeverity.Info;
+    case 'warning':
+      return MarkerSeverity.Warning;
+    case 'hint':
+      return MarkerSeverity.Hint;
+  }
+};
+
+export const ErrorLogs2Markers = (logs: ErrorLog[]): editor.IMarkerData[] =>
+  logs.map(log => ({
+    severity: type2severity(log.type as LogType),
+    startLineNumber: log.row + 1,
+    startColumn: log.col!,
+    endLineNumber: log.row! + 1,
+    endColumn: log.col! + log.len!,
+    code: log.key,
+    source: log.subject ? log.subject : '',
+    message: log.key,
+  }));
+
+export const setErrorLogs = (codeEditor: CodeEditor | null) => (
+  type: LogType
+) => (logs: ErrorLog[]) => {
+  if (codeEditor) {
+    setModelMarkers(codeEditor.getModel()!, type, ErrorLogs2Markers(logs));
+  }
 };

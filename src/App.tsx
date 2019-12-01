@@ -3,6 +3,7 @@ import './App.css';
 import { Container, Row, Col } from 'react-bootstrap';
 import Header from './components/Header/Header';
 import Version from './components/Version/Version';
+import Setting from './components/Setting/Setting';
 import PuppyScreen from './components/PuppyScreen/PuppyScreen';
 import Editor from './components/Editor/Editor';
 import Course from './components/Course/Course';
@@ -15,49 +16,87 @@ import {
   fetchSample,
   fetchSetting,
 } from './logic/course';
-import { Puppy } from '@playpuppy/puppy2d';
-import { play, fullscreen, resize } from './logic/puppy';
+import { PuppyOS, PuppyVM } from '@playpuppy/puppy2d';
+import {
+  play as puppyplay,
+  fullscreen,
+  resize,
+  initConsole,
+} from './logic/puppy';
 import {
   onChange,
   editorDidMount,
   fontMinus,
   fontPlus,
   CodeEditor,
+  setErrorLogs,
 } from './logic/editor';
+import { submitCommand } from './logic/setting';
 
 type AppProps = { qs: QueryParams; hash: string };
 
 const App: React.FC<AppProps> = (props: AppProps) => {
-  const coursePath = props.qs.course ? props.qs.course : 'LIVE2019';
+  const coursePath = props.qs.course ? props.qs.course : 'NLP';
   const page = props.hash !== '' ? parseInt(props.hash.substr(1)) : 0;
   const [courses, setCourses] = useState({} as Courses);
   const [isShowVersion, setIsShowVersion] = useState(false);
   const [isCourseVisible, setIsCourseVisible] = useState(false);
   const [course, setCourse] = useState({ title: '', list: [] } as CourseShape);
   const [courseContent, setCourseContent] = useState('');
-  const [puppy, setPuppy] = useState(null as Puppy | null);
+  const [puppy, setPuppy] = useState(null as PuppyVM | null);
   const [source, setSource] = useState('');
-  const [editorTheme, _setEditorTheme] = useState('vs');
+  const [editorTheme, setEditorTheme] = useState('vs');
   const [editorFontSize, setEditorFontSize] = useState(24);
   const [codeEditor, setCodeEditor] = useState(null as CodeEditor | null);
   const [decos, setDecos] = useState([] as string[]);
+  const [isShowSetting, setIsShowSetting] = useState(false);
+  const [settingCommand, setSettingCommand] = useState('');
+  const [isConsoleVisible, setIsConsoleVisible] = useState(false);
+  const [consoleValue, setConsoleValue] = useState('');
+
+  const play = (puppy: PuppyVM | null) => (source: string) => () => {
+    if (puppyplay(puppy)(source)()) {
+      setEditorTheme('vs');
+    } else {
+      setEditorTheme('error');
+    }
+  };
 
   useEffect(() => {
     fetchCourses(setCourses);
     const puppyElement = document.getElementById('puppy-screen');
     if (puppyElement) {
-      const puppy = new Puppy(puppyElement, {});
-      // puppy.addEventListener('error', setLog);
-      // puppy.addEventListener('warning', setLog);
-      // puppy.addEventListener('info', setLog);
+      const puppyOS = new PuppyOS();
+      const puppy = puppyOS.newPuppyVM(puppyElement);
       setPuppy(puppy);
     }
   }, []);
+  useEffect(() => {
+    if (puppy) {
+      puppy.addEventListener('error', setErrorLogs(codeEditor)('error'));
+      puppy.addEventListener('warning', setErrorLogs(codeEditor)('warning'));
+      puppy.addEventListener('info', setErrorLogs(codeEditor)('info'));
+    }
+  }, [puppy, codeEditor]);
+  useEffect(() => {
+    initConsole(setConsoleValue, puppy);
+  }, [puppy]);
   return (
     <div className="App">
       <Container className="container">
-        <Header courses={courses} setIsShowVersion={setIsShowVersion} />
-        <Version setShow={setIsShowVersion} show={isShowVersion} />
+        <Header
+          courses={courses}
+          setIsShowVersion={setIsShowVersion}
+          setIsShowSetting={() => setIsShowSetting(true)}
+        />
+        <Version show={isShowVersion} setShow={setIsShowVersion} />
+        <Setting
+          show={isShowSetting}
+          setShow={setIsShowSetting}
+          value={settingCommand}
+          setValue={setSettingCommand}
+          submitValue={submitCommand(puppy)}
+        />
         <Row id="main-row">
           <Col id="left-col" xs={6}>
             <Course
@@ -73,7 +112,10 @@ const App: React.FC<AppProps> = (props: AppProps) => {
             />
             <PuppyScreen
               isCourseVisible={isCourseVisible}
+              isConsoleVisible={isConsoleVisible}
               setIsCourseVisible={setIsCourseVisible}
+              setIsConsoleVisible={setIsConsoleVisible}
+              consoleValue={consoleValue}
               play={play(puppy)(source)}
               fullscreen={fullscreen(puppy)}
               setSize={resize(puppy)}
@@ -84,7 +126,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               fontSize={editorFontSize}
               theme={editorTheme}
               source={source}
-              onChange={onChange(codeEditor, setSource, decos, setDecos)}
+              onChange={onChange(codeEditor, setSource, decos, setDecos, puppy)}
               editorDidMount={editorDidMount(setCodeEditor)}
               fontPlus={fontPlus(editorFontSize, setEditorFontSize)}
               fontMinus={fontMinus(editorFontSize, setEditorFontSize)}
@@ -95,28 +137,5 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     </div>
   );
 };
-
-// const App: React.FC<AppProps> = (props: AppProps) => {
-//   const coursePath = props.qs.course ? props.qs.course : 'LIVE2019';
-//   const page = props.hash !== '' ? parseInt(props.hash.substr(1)) : 0;
-//   return (
-//     <div className="App">
-//       <Container className="container">
-//         <Header />
-//         <Input />
-//         <Version />
-//         <Row id="main-row">
-//           <Col id="left-col" xs={6}>
-//             <Course coursePath={coursePath} page={page} />
-//             <PuppyScreen />
-//           </Col>
-//           <Col id="right-col" xs={6}>
-//             <Editor coursePath={coursePath} page={page} />
-//           </Col>
-//         </Row>
-//       </Container>
-//     </div>
-//   );
-// };
 
 export default App;

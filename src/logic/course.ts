@@ -1,3 +1,5 @@
+import { loadFile } from './util';
+
 export type CourseShape = {
   title: string;
   list: {
@@ -7,21 +9,6 @@ export type CourseShape = {
 };
 
 export type Courses = { [path: string]: CourseShape };
-
-export const loadFile: (path: string) => Promise<string> = path => {
-  return fetch(path, {
-    method: 'GET',
-  })
-    .then((res: Response) => {
-      if (res.ok) {
-        return res.text();
-      }
-      throw new Error(res.statusText);
-    })
-    .then((sample: string) => {
-      return sample;
-    });
-};
 
 export const fetchSetting = (setCourse: (course: CourseShape) => void) => (
   path: string

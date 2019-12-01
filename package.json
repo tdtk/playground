@@ -8,7 +8,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.21",
     "@fortawesome/free-solid-svg-icons": "^5.10.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
-    "@playpuppy/puppy2d": "^1.0.2",
+    "@playpuppy/puppy2d": "^1.0.4",
     "@svgr/webpack": "4.1.0",
     "@types/ace": "0.0.42",
     "@types/jest": "24.0.16",
@@ -86,7 +86,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build --remote upstream",
     "lint": "eslint './src/**/*.{ts,tsx}'",
     "lint:fix": "eslint --fix './src/**/*.{ts,tsx}'"
   },
@@ -160,5 +161,5 @@
       "react-app"
     ]
   },
-  "homepage": "http://playpuppy.github.io/LIVE2019"
+  "homepage": "http://playpuppy.github.io/playground"
 }

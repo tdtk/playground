@@ -17,7 +17,6 @@ const EditorFooter: React.FC<EditorFooterProps> = (
 ) => {
   return (
     <div id="editor-footer">
-      <Button>{'Monitor'}</Button>
       <Button onClick={props.fontPlus}>
         <FontAwesomeIcon icon={faPlus} />
       </Button>
@@ -39,7 +38,8 @@ export type EditorProps = {
 };
 
 const Editor: React.FC<EditorProps> = (props: EditorProps) => {
-  const [size, setSize] = useState({ height: 500, width: 500 });
+  const [height, setHeight] = useState(500);
+  const [width, setWidth] = useState(500);
   const [resizeTimer, setResizeTimer] = useState(null as NodeJS.Timeout | null);
   const editorOptions = {
     selectOnLineNumbers: true,
@@ -55,26 +55,22 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
         return;
       }
       setResizeTimer(
-        setTimeout(function() {
-          setSize({
-            height: document.getElementById('right-col')!.clientWidth,
-            width: document.getElementById('right-col')!.clientHeight,
-          });
+        setTimeout(() => {
+          setHeight(document.getElementById('right-col')!.clientHeight);
+          setWidth(document.getElementById('right-col')!.clientWidth);
         }, 300)
       );
     });
-    setSize({
-      height: document.getElementById('right-col')!.clientWidth,
-      width: document.getElementById('right-col')!.clientHeight,
-    });
+    setHeight(document.getElementById('right-col')!.clientHeight);
+    setWidth(document.getElementById('right-col')!.clientWidth);
   }, []);
 
   return (
     <div id="puppy-editor">
       <MonacoEditor
-        width={size.width}
-        height={size.height}
-        language="python"
+        width={width}
+        height={height}
+        language={'python'}
         theme={props.theme}
         value={props.source}
         options={editorOptions}

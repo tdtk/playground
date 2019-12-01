@@ -3,6 +3,7 @@
   max-height: 100%;
   position: absolute;
   padding: 10px 10px 10px 15px;
+  z-index: 1;
 }
 .course-all {
   max-height: 75vh;

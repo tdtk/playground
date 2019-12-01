@@ -1,18 +1,19 @@
-import { Puppy } from '@playpuppy/puppy2d';
+import { PuppyVM as Puppy } from '@playpuppy/puppy2d';
 
-export const resize = (puppy: Puppy | null) => {
+export const resize = (puppy: Puppy | null) => (w: number, h: number) => {
   if (puppy) {
-    return puppy.resize;
+    return puppy.resize(w, h);
   } else {
-    return (_w: number, _h: number) => {};
+    return;
   }
 };
 
 export const play = (puppy: Puppy | null) => (source: string) => () => {
   if (puppy && puppy.load(source)) {
     puppy.start();
+    return true;
   } else {
-    // Load Failer
+    return false;
   }
 };
 
@@ -34,5 +35,28 @@ export const fullscreen = (puppy: Puppy | null) => () => {
         return;
       }
     }
+  }
+};
+
+export const initConsole = (
+  setConsoleValue: (action: React.SetStateAction<string>) => void,
+  puppy: Puppy | null
+) => {
+  if (puppy) {
+    const appendValue = (v: string) => setConsoleValue(prev => prev + v);
+    const os = puppy.os;
+    os.addEventListener(
+      'changed',
+      (e: {
+        key: string;
+        value: string;
+        oldValue: string;
+        env: { [key: string]: any };
+      }) => {
+        appendValue(
+          `> The env value of key "${e.key}" was changed to "${e.value}" from "${e.oldValue}". \n`
+        );
+      }
+    );
   }
 };
