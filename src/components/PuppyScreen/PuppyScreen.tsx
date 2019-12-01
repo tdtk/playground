@@ -9,10 +9,59 @@ import {
   faBook,
   faTerminal,
 } from '@fortawesome/free-solid-svg-icons';
+import MonacoEditor from 'react-monaco-editor';
+
+type PuppyConsoleProps = {
+  consoleValue: string;
+};
+
+const PuppyConsole: React.FC<PuppyConsoleProps> = (
+  props: PuppyConsoleProps
+) => {
+  const [height, setHeight] = useState(500);
+  const [width, setWidth] = useState(500);
+  const [resizeTimer, setResizeTimer] = useState(null as NodeJS.Timer | null);
+  const editorOptions = {
+    fontSize: 30,
+    wordWrap: 'on' as 'on',
+    lineNumbers: 'off' as 'off',
+    readOnly: true,
+  };
+
+  useEffect(() => {
+    addEventListener('resize', () => {
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+        return;
+      }
+      setResizeTimer(
+        setTimeout(() => {
+          setHeight(document.getElementById('left-col')!.clientHeight);
+          setWidth(document.getElementById('left-col')!.clientWidth);
+        }, 300)
+      );
+    });
+    setHeight(document.getElementById('left-col')!.clientHeight);
+    setWidth(document.getElementById('left-col')!.clientWidth);
+  }, []);
+
+  return (
+    <MonacoEditor
+      width={width}
+      height={height}
+      options={editorOptions}
+      value={props.consoleValue}
+      language={'python'}
+      theme={'vs-dark'}
+    />
+  );
+};
 
 type PuppyFooterProps = {
   isCourseVisible: boolean;
+  isConsoleVisible: boolean;
   setIsCourseVisible: (visible: boolean) => void;
+  setIsConsoleVisible: (visible: boolean) => void;
   fullscreen: () => void;
   play: () => void;
 };
@@ -30,7 +79,10 @@ const PuppyFooter: React.FC<PuppyFooterProps> = (props: PuppyFooterProps) => {
       <Button onClick={() => props.setIsCourseVisible(!props.isCourseVisible)}>
         <FontAwesomeIcon icon={props.isCourseVisible ? faBookOpen : faBook} />
       </Button>
-      <Button style={{ paddingRight: '1em', paddingLeft: '0.4em' }}>
+      <Button
+        style={{ paddingRight: '1em', paddingLeft: '0.4em' }}
+        onClick={() => props.setIsConsoleVisible(!props.isConsoleVisible)}
+      >
         <FontAwesomeIcon
           size={'xs'}
           icon={faTerminal}
@@ -41,9 +93,10 @@ const PuppyFooter: React.FC<PuppyFooterProps> = (props: PuppyFooterProps) => {
   );
 };
 
-export type PuppyScreenProps = PuppyFooterProps & {
-  setSize: (width: number, height: number) => void;
-};
+export type PuppyScreenProps = PuppyConsoleProps &
+  PuppyFooterProps & {
+    setSize: (width: number, height: number) => void;
+  };
 
 const PuppyScreen: React.FC<PuppyScreenProps> = (props: PuppyScreenProps) => {
   const [resizeTimer, setResizeTimer] = useState(null as NodeJS.Timeout | null);
@@ -69,9 +122,17 @@ const PuppyScreen: React.FC<PuppyScreenProps> = (props: PuppyScreenProps) => {
         id="puppy-screen"
         onClick={() => props.setIsCourseVisible(false)}
       ></div>
+      <div
+        id="puppy-console"
+        style={{ visibility: props.isConsoleVisible ? 'visible' : 'hidden' }}
+      >
+        <PuppyConsole consoleValue={props.consoleValue} />
+      </div>
       <PuppyFooter
         isCourseVisible={props.isCourseVisible}
+        isConsoleVisible={props.isConsoleVisible}
         setIsCourseVisible={props.setIsCourseVisible}
+        setIsConsoleVisible={props.setIsConsoleVisible}
         play={props.play}
         fullscreen={props.fullscreen}
       />

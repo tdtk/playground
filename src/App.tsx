@@ -17,7 +17,12 @@ import {
   fetchSetting,
 } from './logic/course';
 import { PuppyOS, PuppyVM } from '@playpuppy/puppy2d';
-import { play as puppyplay, fullscreen, resize } from './logic/puppy';
+import {
+  play as puppyplay,
+  fullscreen,
+  resize,
+  initConsole,
+} from './logic/puppy';
 import {
   onChange,
   editorDidMount,
@@ -46,6 +51,8 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   const [decos, setDecos] = useState([] as string[]);
   const [isShowSetting, setIsShowSetting] = useState(false);
   const [settingCommand, setSettingCommand] = useState('');
+  const [isConsoleVisible, setIsConsoleVisible] = useState(false);
+  const [consoleValue, setConsoleValue] = useState('');
 
   const play = (puppy: PuppyVM | null) => (source: string) => () => {
     if (puppyplay(puppy)(source)()) {
@@ -71,6 +78,9 @@ const App: React.FC<AppProps> = (props: AppProps) => {
       puppy.addEventListener('info', setErrorLogs(codeEditor)('info'));
     }
   }, [puppy, codeEditor]);
+  useEffect(() => {
+    initConsole(setConsoleValue, puppy);
+  }, [puppy]);
   return (
     <div className="App">
       <Container className="container">
@@ -102,7 +112,10 @@ const App: React.FC<AppProps> = (props: AppProps) => {
             />
             <PuppyScreen
               isCourseVisible={isCourseVisible}
+              isConsoleVisible={isConsoleVisible}
               setIsCourseVisible={setIsCourseVisible}
+              setIsConsoleVisible={setIsConsoleVisible}
+              consoleValue={consoleValue}
               play={play(puppy)(source)}
               fullscreen={fullscreen(puppy)}
               setSize={resize(puppy)}

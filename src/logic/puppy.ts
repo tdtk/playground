@@ -37,3 +37,26 @@ export const fullscreen = (puppy: Puppy | null) => () => {
     }
   }
 };
+
+export const initConsole = (
+  setConsoleValue: (action: React.SetStateAction<string>) => void,
+  puppy: Puppy | null
+) => {
+  if (puppy) {
+    const appendValue = (v: string) => setConsoleValue(prev => prev + v);
+    const os = puppy.os;
+    os.addEventListener(
+      'changed',
+      (e: {
+        key: string;
+        value: string;
+        oldValue: string;
+        env: { [key: string]: any };
+      }) => {
+        appendValue(
+          `> The env value of key "${e.key}" was changed to "${e.value}" from "${e.oldValue}". \n`
+        );
+      }
+    );
+  }
+};
