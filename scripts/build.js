@@ -104,6 +104,10 @@ checkBrowsers(paths.appPath, isInteractive)
         buildFolder,
         useYarn
       );
+
+      addElectronConfig().catch((err) => {
+        console.log(err);
+      });
     },
     err => {
       console.log(chalk.red('Failed to compile.\n'));
@@ -188,4 +192,42 @@ function copyPublicFolder() {
     dereference: true,
     filter: file => file !== paths.appHtml,
   });
+}
+
+// Create the config file for Electron
+function addElectronConfig() {
+  try {
+    const packageJsonOrigin = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+    const packageJson = JSON.stringify({
+      "name": packageJsonOrigin.name,
+      "version": packageJsonOrigin.version,
+      "description": packageJsonOrigin.description || 'native app created with electron',
+      "author": packageJsonOrigin.author || '',
+      "main": "electron-render.js",
+      "scripts": {
+        "electron": "electron .",
+        "make": "electron-builder build -m zip -w zip"
+      },
+      "build": {
+        "directories": {
+          "output": "../apps",
+          "buildResources": "."
+        },
+        "productName": "Puppy Playground",
+        "copyright": "Copyright Â© 2019 Mario"
+      },
+      "devDependencies": {
+        "electron": "^7.1.2",
+        "electron-builder": "^21.2.0"
+      }
+    });
+
+    fs.writeFileSync('build/package.json', packageJson);
+    fs.copyFileSync('scripts/electron-render.js', 'build/electron-render.js');
+    fs.copyFileSync('public/image/logo.png', 'build/icon.png');
+    return Promise.resolve(true);
+  } catch (err) {
+    return Promise.reject(err)
+  }
 }
