@@ -55,6 +55,12 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   const [consoleValue, setConsoleValue] = useState([] as ConsoleValue);
 
   const play = (puppy: PuppyVM | null) => (source: string) => () => {
+    if (course.list.length !== 0) {
+      sessionStorage.setItem(
+        `${coursePath}${course.list[page].path}/sample.py`,
+        source
+      );
+    }
     if (puppyplay(puppy)(source)()) {
       setEditorTheme('vs');
     } else {

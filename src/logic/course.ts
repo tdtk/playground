@@ -81,8 +81,13 @@ export const fetchCoursesFromGitHub = (
 export const fetchTextFromGitHub = (setContent: (content: string) => void) => (
   coursePath: string,
   path: string
-): Promise<void> =>
-  fetchFileFromGitHub(`${GITHUB_API_REPO}${coursePath}${path}/index.md`)
+): Promise<void> => {
+  const text = window.sessionStorage.getItem(`${coursePath}${path}/index.md`);
+  if (text) {
+    setContent(text);
+    return new Promise(() => {});
+  }
+  return fetchFileFromGitHub(`${GITHUB_API_REPO}${coursePath}${path}/index.md`)
     .then((res: Response) => {
       if (res.ok) {
         return res.text();
@@ -91,7 +96,9 @@ export const fetchTextFromGitHub = (setContent: (content: string) => void) => (
     })
     .then((text: string) => {
       setContent(text);
+      window.sessionStorage.setItem(`${coursePath}${path}/index.md`, text);
     });
+};
 
 export const fetchSampleFromGitHub = (setSource: (sample: string) => void) => (
   coursePath: string,
@@ -113,6 +120,7 @@ export const fetchSampleFromGitHub = (setSource: (sample: string) => void) => (
     })
     .then((sample: string) => {
       setSource(sample);
+      window.sessionStorage.setItem(`${coursePath}${path}/sample.py`, sample);
       return sample;
     });
 };
