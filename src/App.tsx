@@ -9,12 +9,11 @@ import Editor from './components/Editor/Editor';
 import Course from './components/Course/Course';
 import { QueryParams } from './index';
 import {
-  fetchCourses,
   Courses,
   CourseShape,
-  fetchContent,
-  fetchSample,
-  fetchSetting,
+  fetchTextFromGitHub,
+  fetchSampleFromGitHub,
+  fetchCoursesFromGitHub,
 } from './logic/course';
 import { PuppyOS, PuppyVM } from '@playpuppy/puppy2d';
 import {
@@ -37,7 +36,7 @@ import { submitCommand } from './logic/setting';
 type AppProps = { qs: QueryParams; hash: string };
 
 const App: React.FC<AppProps> = (props: AppProps) => {
-  const coursePath = props.qs.course ? props.qs.course : 'NLP';
+  const coursePath = props.qs.course ? props.qs.course : 'course/Rectangle';
   const page = props.hash !== '' ? parseInt(props.hash.substr(1)) : 0;
   const [courses, setCourses] = useState({} as Courses);
   const [isShowVersion, setIsShowVersion] = useState(false);
@@ -64,7 +63,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   };
 
   useEffect(() => {
-    fetchCourses(setCourses);
+    fetchCoursesFromGitHub(setCourses);
     const puppyElement = document.getElementById('puppy-screen');
     if (puppyElement) {
       const puppyOS = new PuppyOS();
@@ -82,6 +81,11 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   useEffect(() => {
     initConsole(setConsoleValue, puppy);
   }, [puppy]);
+  useEffect(() => {
+    if (courses[coursePath]) {
+      setCourse(courses[coursePath]);
+    }
+  }, [coursePath, courses]);
   return (
     <div className="App">
       <Container className="container">
@@ -107,9 +111,8 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               content={courseContent}
               visible={isCourseVisible}
               play={play(puppy)}
-              fetchContent={fetchContent(setCourseContent)}
-              fetchSample={fetchSample(setSource)}
-              fetchSetting={fetchSetting(setCourse)}
+              fetchContent={fetchTextFromGitHub(setCourseContent)}
+              fetchSample={fetchSampleFromGitHub(setSource)}
             />
             <PuppyScreen
               isCourseVisible={isCourseVisible}

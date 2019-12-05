@@ -20,7 +20,6 @@ type CourseProps = {
   play: (source: string) => () => void;
   fetchContent: (coursePath: string, path: string) => void;
   fetchSample: (coursePath: string, path: string) => Promise<string>;
-  fetchSetting: (coursePath: string) => void;
 };
 
 const Course: React.FC<CourseProps> = (props: CourseProps) => {
@@ -34,10 +33,6 @@ const Course: React.FC<CourseProps> = (props: CourseProps) => {
         });
     }
   }, [props.page, props.coursePath, props.course]);
-
-  useEffect(() => {
-    props.fetchSetting(props.coursePath);
-  }, [props.coursePath]);
 
   return (
     <div
