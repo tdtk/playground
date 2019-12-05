@@ -9,55 +9,8 @@ import {
   faBook,
   faTerminal,
 } from '@fortawesome/free-solid-svg-icons';
-// import MonacoEditor from 'react-monaco-editor';
 import PuppyConsole from './PuppyConsole';
 import { ConsoleValue } from '../../logic/puppy';
-
-// type PuppyConsoleProps = {
-//   consoleValue: string;
-// };
-
-// const PuppyConsole: React.FC<PuppyConsoleProps> = (
-//   props: PuppyConsoleProps
-// ) => {
-//   const [height, setHeight] = useState(500);
-//   const [width, setWidth] = useState(500);
-//   const [resizeTimer, setResizeTimer] = useState(null as NodeJS.Timer | null);
-//   const editorOptions = {
-//     fontSize: 30,
-//     wordWrap: 'on' as 'on',
-//     lineNumbers: 'off' as 'off',
-//     readOnly: true,
-//   };
-
-//   useEffect(() => {
-//     addEventListener('resize', () => {
-//       if (resizeTimer) {
-//         clearTimeout(resizeTimer);
-//         return;
-//       }
-//       setResizeTimer(
-//         setTimeout(() => {
-//           setHeight(document.getElementById('left-col')!.clientHeight);
-//           setWidth(document.getElementById('left-col')!.clientWidth);
-//         }, 300)
-//       );
-//     });
-//     setHeight(document.getElementById('left-col')!.clientHeight);
-//     setWidth(document.getElementById('left-col')!.clientWidth);
-//   }, []);
-
-//   return (
-//     <MonacoEditor
-//       width={width}
-//       height={height}
-//       options={editorOptions}
-//       value={props.consoleValue}
-//       language={'puppyConsoleLanguage'}
-//       theme={'vs'}
-//     />
-//   );
-// };
 
 type PuppyFooterProps = {
   isCourseVisible: boolean;
