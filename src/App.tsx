@@ -61,6 +61,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
         source
       );
     }
+    setConsoleValue([]);
     if (puppyplay(puppy)(source)()) {
       setEditorTheme('vs');
     } else {
