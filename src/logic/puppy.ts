@@ -1,5 +1,13 @@
 import { PuppyVM as Puppy } from '@playpuppy/puppy2d';
 
+export type StringElement = {
+  color?: string;
+  backgroundColor?: string;
+  value: string;
+};
+
+export type ConsoleValue = StringElement[][];
+
 export const resize = (puppy: Puppy | null) => (w: number, h: number) => {
   if (puppy) {
     return puppy.resize(w, h);
@@ -39,11 +47,19 @@ export const fullscreen = (puppy: Puppy | null) => () => {
 };
 
 export const initConsole = (
-  setConsoleValue: (action: React.SetStateAction<string>) => void,
+  setConsoleValue: (action: React.SetStateAction<ConsoleValue>) => void,
   puppy: Puppy | null
 ) => {
   if (puppy) {
-    const appendValue = (v: string) => setConsoleValue(prev => prev + v);
+    const appendLine = (stringElements: StringElement[]) =>
+      setConsoleValue(prev => prev.concat([stringElements]));
+    puppy.addEventListener('stdout', (e: { text: string }) => {
+      const stringElements: StringElement[] = [];
+      stringElements.push({
+        value: e.text,
+      });
+      appendLine(stringElements);
+    });
     const os = puppy.os;
     os.addEventListener(
       'changed',
@@ -53,9 +69,11 @@ export const initConsole = (
         oldValue: string;
         env: { [key: string]: any };
       }) => {
-        appendValue(
-          `> The env value of key "${e.key}" was changed to "${e.value}" from "${e.oldValue}". \n`
-        );
+        const stringElements: StringElement[] = [];
+        stringElements.push({
+          value: `> The env value of key "${e.key}" was changed to "${e.value}" from "${e.oldValue}". \n`,
+        });
+        appendLine(stringElements);
       }
     );
   }

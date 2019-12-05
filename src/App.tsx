@@ -22,6 +22,7 @@ import {
   fullscreen,
   resize,
   initConsole,
+  ConsoleValue,
 } from './logic/puppy';
 import {
   onChange,
@@ -52,7 +53,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   const [isShowSetting, setIsShowSetting] = useState(false);
   const [settingCommand, setSettingCommand] = useState('');
   const [isConsoleVisible, setIsConsoleVisible] = useState(false);
-  const [consoleValue, setConsoleValue] = useState('');
+  const [consoleValue, setConsoleValue] = useState([] as ConsoleValue);
 
   const play = (puppy: PuppyVM | null) => (source: string) => () => {
     if (puppyplay(puppy)(source)()) {
