@@ -17,10 +17,10 @@ const EditorFooter: React.FC<EditorFooterProps> = (
 ) => {
   return (
     <div id="editor-footer">
-      <Button onClick={props.fontPlus}>
+      <Button className="puppy-background" onClick={props.fontPlus}>
         <FontAwesomeIcon icon={faPlus} />
       </Button>
-      <Button onClick={props.fontMinus}>
+      <Button className="puppy-background" onClick={props.fontMinus}>
         <FontAwesomeIcon icon={faMinus} />
       </Button>
     </div>

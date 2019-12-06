@@ -24,17 +24,21 @@ type PuppyFooterProps = {
 const PuppyFooter: React.FC<PuppyFooterProps> = (props: PuppyFooterProps) => {
   return (
     <div id="puppy-footer">
-      <Button onClick={() => props.play()}>
+      <Button className="puppy-background" onClick={() => props.play()}>
         <FontAwesomeIcon icon={faPlay} />
         {' Play'}
       </Button>
-      <Button onClick={() => props.fullscreen()}>
+      <Button className="puppy-background" onClick={() => props.fullscreen()}>
         <FontAwesomeIcon icon={faExpand} />
       </Button>
-      <Button onClick={() => props.setIsCourseVisible(!props.isCourseVisible)}>
+      <Button
+        className="puppy-background"
+        onClick={() => props.setIsCourseVisible(!props.isCourseVisible)}
+      >
         <FontAwesomeIcon icon={props.isCourseVisible ? faBookOpen : faBook} />
       </Button>
       <Button
+        className="puppy-background"
         style={{ paddingRight: '1em', paddingLeft: '0.4em' }}
         onClick={() => props.setIsConsoleVisible(!props.isConsoleVisible)}
       >
