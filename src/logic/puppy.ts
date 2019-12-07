@@ -48,6 +48,7 @@ export const fullscreen = (puppy: Puppy | null) => () => {
 
 export const initConsole = (
   setConsoleValue: (action: React.SetStateAction<ConsoleValue>) => void,
+  settingAction: { AUTO_PLAY: React.Dispatch<React.SetStateAction<boolean>> },
   puppy: Puppy | null
 ) => {
   if (puppy) {
@@ -70,6 +71,9 @@ export const initConsole = (
         env: { [key: string]: any };
       }) => {
         const stringElements: StringElement[] = [];
+        if (e.key in settingAction) {
+          settingAction[e.key](e.value === 'true');
+        }
         stringElements.push({
           value: `> The env value of key "${e.key}" was changed to "${e.value}" from "${e.oldValue}". \n`,
         });

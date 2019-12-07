@@ -32,6 +32,7 @@ import {
   setErrorLogs,
 } from './logic/editor';
 import { submitCommand } from './logic/setting';
+import { AutoPlayer } from './logic/autoplay';
 
 type AppProps = { qs: QueryParams; hash: string };
 
@@ -53,7 +54,16 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   const [settingCommand, setSettingCommand] = useState('');
   const [isConsoleVisible, setIsConsoleVisible] = useState(false);
   const [consoleValue, setConsoleValue] = useState([] as ConsoleValue);
+  const [isAutoPlay, setIsAutoPlay] = useState(false);
+  const [autoPlayer, _setAutoPlayer] = useState(new AutoPlayer());
 
+  const autoPlayFunc = () => {
+    const page =
+      window.location.hash !== ''
+        ? parseInt(window.location.hash.substr(1))
+        : 0;
+    window.location.hash = `#${page === course.list.length - 1 ? 0 : page + 1}`;
+  };
   const play = (puppy: PuppyVM | null) => (source: string) => () => {
     if (course.list.length !== 0) {
       sessionStorage.setItem(
@@ -86,13 +96,17 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     }
   }, [puppy, codeEditor]);
   useEffect(() => {
-    initConsole(setConsoleValue, puppy);
+    initConsole(setConsoleValue, { AUTO_PLAY: setIsAutoPlay }, puppy);
+    if (puppy) {
+      setIsAutoPlay(puppy.os.getenv('AUTO_PLAY', false) === 'true');
+    }
   }, [puppy]);
   useEffect(() => {
     if (courses[coursePath]) {
       setCourse(courses[coursePath]);
     }
   }, [coursePath, courses]);
+
   return (
     <div className="App">
       <Container className="container">
@@ -127,7 +141,11 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               setIsCourseVisible={setIsCourseVisible}
               setIsConsoleVisible={setIsConsoleVisible}
               consoleValue={consoleValue}
-              play={play(puppy)(source)}
+              play={
+                isAutoPlay
+                  ? () => autoPlayer.play(autoPlayFunc)
+                  : play(puppy)(source)
+              }
               fullscreen={fullscreen(puppy)}
               setSize={resize(puppy)}
             />
