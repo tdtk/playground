@@ -8,6 +8,7 @@ import {
 } from 'monaco-editor';
 import { callKoinu } from './koinu';
 import { ErrorLog, PuppyVM } from '@playpuppy/puppy2d';
+import { messagefy } from '@playpuppy/puppy2d/dist/lang/code';
 
 export type CodeEditor = editor.IStandaloneCodeEditor;
 export type ContentChangedEvent = editor.IModelContentChangedEvent;
@@ -267,7 +268,7 @@ export const ErrorLogs2Markers = (logs: ErrorLog[]): editor.IMarkerData[] =>
     endColumn: log.col! + log.len!,
     code: log.key,
     source: log.subject ? log.subject : '',
-    message: log.key,
+    message: messagefy(log),
   }));
 
 export const setErrorLogs = (codeEditor: CodeEditor | null) => (
