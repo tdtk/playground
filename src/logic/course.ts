@@ -109,7 +109,7 @@ export const fetchSampleFromGitHub = (setSource: (sample: string) => void) => (
   );
   if (sample) {
     setSource(sample);
-    return new Promise(() => sample);
+    return Promise.resolve(sample);
   }
   return fetchFileFromGitHub(`${GITHUB_API_REPO}${coursePath}${path}/sample.py`)
     .then((res: Response) => {

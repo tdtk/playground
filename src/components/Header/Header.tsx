@@ -51,7 +51,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
             })}
           </NavDropdown>
         </Nav>
-        <Button onClick={props.setIsShowSetting}>
+        <Button className="puppy-background" onClick={props.setIsShowSetting}>
           <FontAwesomeIcon icon={faCog} />
         </Button>
       </Navbar>
