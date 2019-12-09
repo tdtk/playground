@@ -278,3 +278,24 @@ export const setErrorLogs = (codeEditor: CodeEditor | null) => (
     setModelMarkers(codeEditor.getModel()!, type, ErrorLogs2Markers(logs));
   }
 };
+
+export const setCodeHighLight = (
+  setHighLight: React.Dispatch<React.SetStateAction<string[]>>,
+  codeEditor: CodeEditor
+) => (startLineNum: number, endLineNum: number) => {
+  setHighLight(hl =>
+    codeEditor.deltaDecorations(hl, [
+      {
+        range: new Range(startLineNum, 1, endLineNum, 1),
+        options: { isWholeLine: true, className: 'code-highlight' },
+      },
+    ])
+  );
+};
+
+export const resetCodeHighLight = (
+  setHighLight: React.Dispatch<React.SetStateAction<string[]>>,
+  codeEditor: CodeEditor
+) => () => {
+  setHighLight(hl => codeEditor.deltaDecorations(hl, []));
+};

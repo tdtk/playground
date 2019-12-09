@@ -16,6 +16,7 @@ import {
   fetchCoursesFromGitHub,
 } from './logic/course';
 import { PuppyOS, PuppyVM } from '@playpuppy/puppy2d';
+import { LineEvent, ActionEvent } from '@playpuppy/puppy2d/dist/events';
 import {
   play as puppyplay,
   fullscreen,
@@ -30,6 +31,8 @@ import {
   fontPlus,
   CodeEditor,
   setErrorLogs,
+  setCodeHighLight,
+  resetCodeHighLight,
 } from './logic/editor';
 import { submitCommand } from './logic/setting';
 import { AutoPlayer } from './logic/autoplay';
@@ -56,6 +59,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   const [consoleValue, setConsoleValue] = useState([] as ConsoleValue);
   const [isAutoPlay, setIsAutoPlay] = useState(false);
   const [autoPlayer, _setAutoPlayer] = useState(new AutoPlayer());
+  const [_highlight, setHighLight] = useState([] as string[]);
 
   const autoPlayFunc = () => {
     const page =
@@ -95,6 +99,18 @@ const App: React.FC<AppProps> = (props: AppProps) => {
       puppy.addEventListener('info', setErrorLogs(codeEditor)('info'));
     }
   }, [puppy, codeEditor]);
+  useEffect(() => {
+    if (puppy && codeEditor) {
+      puppy.addEventListener('line', (e: LineEvent) => {
+        setCodeHighLight(setHighLight, codeEditor)(e.row + 1, e.row + 1);
+      });
+      puppy.addEventListener('action', (e: ActionEvent) => {
+        if (e.action == 'end' && e.type == 'run') {
+          resetCodeHighLight(setHighLight, codeEditor)();
+        }
+      });
+    }
+  }, [puppy, codeEditor, setHighLight]);
   useEffect(() => {
     initConsole(setConsoleValue, { AUTO_PLAY: setIsAutoPlay }, puppy);
     if (puppy) {
