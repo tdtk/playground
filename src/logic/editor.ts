@@ -219,11 +219,13 @@ export const onChange = (
     checkZenkaku(codeEditor, decos, setDecos);
   }
   setSource(source);
-  if (puppy && !codeChangeTimer) {
+  if (codeChangeTimer) {
+    clearTimeout(codeChangeTimer);
+  }
+  if (puppy) {
     setCodeChangeTimer(
       setTimeout(() => {
         puppy.load(source, false);
-        setCodeChangeTimer(null);
       }, 500)
     );
   }
