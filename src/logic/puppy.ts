@@ -1,5 +1,5 @@
 import { PuppyVM as Puppy } from '@playpuppy/puppy2d';
-import { ActionEvent, OutputEvent } from '@playpuppy/puppy2d/dist/events';
+import { OutputEvent } from '@playpuppy/puppy2d/dist/events';
 
 export type StringElement = {
   color?: string;
@@ -48,7 +48,10 @@ export const fullscreen = (puppy: Puppy | null) => () => {
 
 export const initConsole = (
   setConsoleValue: (action: React.SetStateAction<ConsoleValue>) => void,
-  settingAction: { AUTO_PLAY: React.Dispatch<React.SetStateAction<boolean>> },
+  settingAction: {
+    AUTO_PLAY: React.Dispatch<React.SetStateAction<boolean>>;
+    DEBUG: React.Dispatch<React.SetStateAction<boolean>>;
+  },
   puppy: Puppy | null
 ) => {
   if (puppy) {
@@ -69,13 +72,13 @@ export const initConsole = (
       });
       appendLine(stringElements);
     });
-    puppy.addEventListener('action', (e: ActionEvent) => {
-      const stringElements: StringElement[] = [];
-      stringElements.push({
-        value: `> Puppy ${e.type} ${e.action}`,
-      });
-      appendLine(stringElements);
-    });
+    // puppy.addEventListener('action', (e: ActionEvent) => {
+    //   const stringElements: StringElement[] = [];
+    //   stringElements.push({
+    //     value: `> Puppy ${e.type} ${e.action}`,
+    //   });
+    //   appendLine(stringElements);
+    // });
     const os = puppy.os;
     os.addEventListener(
       'changed',
