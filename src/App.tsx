@@ -60,6 +60,9 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   const [isAutoPlay, setIsAutoPlay] = useState(false);
   const [autoPlayer, _setAutoPlayer] = useState(new AutoPlayer());
   const [_highlight, setHighLight] = useState([] as string[]);
+  const [codeChangeTimer, setCodeChangeTimer] = useState(
+    null as NodeJS.Timer | null
+  );
 
   const autoPlayFunc = () => {
     const page =
@@ -171,7 +174,15 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               fontSize={editorFontSize}
               theme={editorTheme}
               source={source}
-              onChange={onChange(codeEditor, setSource, decos, setDecos, puppy)}
+              onChange={onChange(
+                codeEditor,
+                setSource,
+                decos,
+                setDecos,
+                puppy,
+                codeChangeTimer,
+                setCodeChangeTimer
+              )}
               editorDidMount={editorDidMount(setCodeEditor)}
               fontPlus={fontPlus(editorFontSize, setEditorFontSize)}
               fontMinus={fontMinus(editorFontSize, setEditorFontSize)}
