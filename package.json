@@ -88,7 +88,8 @@
     "premake": "PUBLIC_URL=./ node scripts/build.js",
     "test": "node scripts/test.js",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build --remote upstream",
+    "deploy": "firebase deploy",
+    "serve": "npm run build && firebase serve",
     "lint": "eslint './src/**/*.{ts,tsx}'",
     "lint:fix": "eslint --fix './src/**/*.{ts,tsx}'"
   },
@@ -162,5 +163,5 @@
       "react-app"
     ]
   },
-  "homepage": "http://playpuppy.github.io/playground"
+  "homepage": "."
 }
