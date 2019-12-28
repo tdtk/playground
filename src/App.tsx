@@ -7,6 +7,7 @@ import Setting from './components/Setting/Setting';
 import PuppyScreen from './components/PuppyScreen/PuppyScreen';
 import Editor from './components/Editor/Editor';
 import Course from './components/Course/Course';
+import Login from './components/Login/Login';
 import { QueryParams } from './index';
 import {
   Courses,
@@ -64,6 +65,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   const [codeChangeTimer, setCodeChangeTimer] = useState(
     null as NodeJS.Timer | null
   );
+  const [isShowLogin, setIsShowLogin] = useState(false);
 
   const autoPlayFunc = () => {
     const page =
@@ -164,6 +166,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
           courses={courses}
           setIsShowVersion={setIsShowVersion}
           setIsShowSetting={() => setIsShowSetting(true)}
+          setIsShowLogin={() => setIsShowLogin(true)}
         />
         <Version show={isShowVersion} setShow={setIsShowVersion} />
         <Setting
@@ -173,6 +176,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
           setValue={setSettingCommand}
           submitValue={submitCommand(puppy)}
         />
+        <Login show={isShowLogin} setShow={setIsShowLogin} />
         <Row id="main-row">
           <Col id="left-col" xs={6}>
             <Course

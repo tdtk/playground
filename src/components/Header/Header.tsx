@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { CourseShape } from '../../logic/course';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'react-bootstrap';
 import './Header.css';
@@ -10,6 +10,7 @@ export type HeaderProps = {
   courses: { [path: string]: CourseShape };
   setIsShowVersion: (isShow: boolean) => void;
   setIsShowSetting: () => void;
+  setIsShowLogin: () => void;
 };
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
@@ -51,9 +52,14 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
             })}
           </NavDropdown>
         </Nav>
-        <Button className="puppy-background" onClick={props.setIsShowSetting}>
-          <FontAwesomeIcon icon={faCog} />
-        </Button>
+        <div className="header-buttons">
+          <Button className="puppy-background" onClick={props.setIsShowLogin}>
+            <FontAwesomeIcon icon={faUser} />
+          </Button>
+          <Button className="puppy-background" onClick={props.setIsShowSetting}>
+            <FontAwesomeIcon icon={faCog} />
+          </Button>
+        </div>
       </Navbar>
     </div>
   );
