@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firebase-firestore';
 
 const projectId = process.env.REACT_APP_FIREBASE_PROJECT_ID;
 
@@ -16,12 +17,4 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const provider = new firebase.auth.GoogleAuthProvider();
-
-export const signInByGoogle = () =>
-  firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then(result => {
-      console.log(result);
-    });
+export default firebase;

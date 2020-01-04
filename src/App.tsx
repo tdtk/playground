@@ -37,7 +37,7 @@ import {
 } from './logic/editor';
 import { submitCommand } from './logic/setting';
 import { AutoPlayer } from './logic/autoplay';
-import { signInByGoogle } from './logic/auth';
+import { signInByGoogle } from './logic/firebase/auth';
 
 type AppProps = { qs: QueryParams; hash: string };
 
