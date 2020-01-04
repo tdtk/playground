@@ -28,7 +28,7 @@ const Setting: React.FC<SettingProps> = (props: SettingProps) => {
         <Form.Group controlId="formCommand">
           <FormControl
             value={props.value}
-            onChange={e => props.setValue(e.target.value)}
+            onChange={(e: any) => props.setValue(e.target.value)}
           />
         </Form.Group>
       </Form>

@@ -20,7 +20,7 @@ const Input: React.FC<InputProps> = (props: InputProps) => {
       <Modal.Body>
         <Form
           id="puppy-input-form"
-          onSubmit={e => {
+          onSubmit={(e: any)=> {
             props.setShow(false);
             if (e.preventDefault) {
               e.preventDefault();
@@ -34,7 +34,7 @@ const Input: React.FC<InputProps> = (props: InputProps) => {
             <FormControl
               placeholder={props.placeholder}
               value={props.value}
-              onChange={e => props.setValue(e.target.value)}
+              onChange={(e: any) => props.setValue(e.target.value)}
             />
             <InputGroup.Append>
               <Button type="submit">送信する</Button>
