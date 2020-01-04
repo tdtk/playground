@@ -37,6 +37,7 @@ import {
 } from './logic/editor';
 import { submitCommand } from './logic/setting';
 import { AutoPlayer } from './logic/autoplay';
+import { signInByGoogle } from './logic/auth';
 
 type AppProps = { qs: QueryParams; hash: string };
 
@@ -176,7 +177,11 @@ const App: React.FC<AppProps> = (props: AppProps) => {
           setValue={setSettingCommand}
           submitValue={submitCommand(puppy)}
         />
-        <Login show={isShowLogin} setShow={setIsShowLogin} />
+        <Login
+          show={isShowLogin}
+          setShow={setIsShowLogin}
+          signInByGoogle={signInByGoogle}
+        />
         <Row id="main-row">
           <Col id="left-col" xs={6}>
             <Course

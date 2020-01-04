@@ -1,9 +1,11 @@
 import React from 'react';
 import { Modal, FormControl } from 'react-bootstrap';
+import google_button from './google_button.png';
 
 export type LoginProps = {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  signInByGoogle: () => Promise<void>;
 };
 
 const Login: React.FC<LoginProps> = (props: LoginProps) => {
@@ -14,10 +16,14 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
           <Modal.Title>Login</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <div>
+            <img src={google_button} onClick={() => props.signInByGoogle()} />
+          </div>
           <label>e-mail</label>
           <FormControl placeholder="e-mail" />
           <label>password</label>
-          <FormControl placeholder="password" />
+          <FormControl type="password" placeholder="password" />
+          <a>Create new account</a>
         </Modal.Body>
       </Modal>
     </>
