@@ -63,7 +63,7 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
     });
     setHeight(document.getElementById('right-col')!.clientHeight);
     setWidth(document.getElementById('right-col')!.clientWidth);
-  }, []);
+  }, [resizeTimer]);
 
   return (
     <div id="puppy-editor">

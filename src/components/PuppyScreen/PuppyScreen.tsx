@@ -73,7 +73,7 @@ const PuppyScreen: React.FC<PuppyScreenProps> = (props: PuppyScreenProps) => {
         }, 300)
       );
     });
-  }, [props.setSize]);
+  }, [props, props.setSize, resizeTimer]);
 
   return (
     <>
