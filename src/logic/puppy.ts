@@ -1,5 +1,6 @@
 import { PuppyVM as Puppy } from '@playpuppy/puppy2d';
 import { OutputEvent } from '@playpuppy/puppy2d/dist/events';
+import { add_log } from './firebase/firestore';
 
 export type StringElement = {
   color?: string;
@@ -88,6 +89,18 @@ export const initConsole = (
         oldValue: string;
         env: { [key: string]: any };
       }) => {
+        add_log(
+          {
+            type: 'changed-env',
+            value: {
+              key: e.key,
+              old_value: e.oldValue,
+              new_value: e.value,
+            },
+          },
+          new Date(),
+          e.env['USER']
+        );
         const stringElements: StringElement[] = [];
         if (e.key in settingAction) {
           settingAction[e.key](e.value === 'true');

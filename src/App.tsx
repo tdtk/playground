@@ -180,7 +180,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
         <Login
           show={isShowLogin}
           setShow={setIsShowLogin}
-          signInByGoogle={signInByGoogle}
+          signInByGoogle={() => signInByGoogle(puppy)}
         />
         <Row id="main-row">
           <Col id="left-col" xs={6}>
