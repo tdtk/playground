@@ -9,6 +9,7 @@ import {
 import { callKoinu } from './koinu';
 import { ErrorLog, PuppyVM } from '@playpuppy/puppy2d';
 import { messagefy } from '@playpuppy/puppy2d/dist/lang/code';
+import { add_log } from './firebase/firestore';
 
 export type CodeEditor = editor.IStandaloneCodeEditor;
 export type ContentChangedEvent = editor.IModelContentChangedEvent;
@@ -234,12 +235,12 @@ export const onChange = (
             setEditorTheme('error');
             return false;
           }
-        } catch {
-          console.log(`Puppy Error`);
+        } catch (e) {
+          console.log(e);
           setEditorTheme('error');
           return false;
         }
-      }, 500)
+      }, 1000)
     );
   }
 };
@@ -296,6 +297,22 @@ export const ErrorLogs2Markers = (logs: ErrorLog[]): editor.IMarkerData[] =>
 export const setErrorLogs = (codeEditor: CodeEditor | null) => (
   type: LogType
 ) => (logs: ErrorLog[]) => {
+  if (logs.length > 0) {
+    logs.map(log => {
+      Object.keys(log).forEach(key => {
+        if (log[key] === undefined) {
+          log[key] = null;
+        }
+      });
+    });
+    add_log(
+      {
+        type: 'compile-error',
+        value: logs,
+      },
+      new Date()
+    );
+  }
   if (codeEditor) {
     setModelMarkers(codeEditor.getModel()!, type, ErrorLogs2Markers(logs));
   }

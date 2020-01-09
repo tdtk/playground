@@ -1,25 +1,10 @@
 import firebase from './init';
+import { ErrorLog } from '@playpuppy/puppy2d';
 
 export type User = {
   email: string;
   name: string;
   uid: string;
-};
-
-export type FontSizeLog = {
-  type: 'font-size';
-  value: {
-    old_value: number;
-    new_value: number;
-  };
-};
-
-export type IntervalLog = {
-  type: 'interval';
-  value: {
-    old_value: number;
-    new_value: number;
-  };
 };
 
 export type ChangedEnvLog = {
@@ -31,23 +16,31 @@ export type ChangedEnvLog = {
   };
 };
 
-type LogValue = FontSizeLog | IntervalLog | ChangedEnvLog;
+export type CompileErrorLog = {
+  type: 'compile-error';
+  value: ErrorLog[];
+};
+
+type LogValue = ChangedEnvLog | CompileErrorLog;
 
 type Log = LogValue & {
   time: firebase.firestore.Timestamp;
   uid: string;
 };
 
-export const add_log = (logValue: LogValue, time: Date, uid: string) => {
-  firebase
-    .firestore()
-    .collection('logs')
-    .add({
-      type: logValue.type,
-      value: logValue.value,
-      time: firebase.firestore.Timestamp.fromDate(time),
-      uid,
-    });
+export const add_log = (logValue: LogValue, time: Date) => {
+  const usr = firebase.auth().currentUser;
+  if (usr) {
+    firebase
+      .firestore()
+      .collection('logs')
+      .add({
+        type: logValue.type,
+        value: logValue.value,
+        time: firebase.firestore.Timestamp.fromDate(time),
+        uid: usr.uid,
+      });
+  }
 };
 
 export const set_user = (user: User) => {

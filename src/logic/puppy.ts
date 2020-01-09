@@ -20,8 +20,9 @@ export const resize = (puppy: Puppy | null) => (w: number, h: number) => {
 
 export const play = (puppy: Puppy | null) => (source: string) => () => {
   try {
+    console.log(source);
     return puppy && puppy.load(source);
-  } catch {
+  } catch (e) {
     console.log(`Puppy Error`);
     return false;
   }
@@ -99,8 +100,7 @@ export const initConsole = (
               new_value: e.value,
             },
           },
-          new Date(),
-          e.env['USER']
+          new Date()
         );
         const stringElements: StringElement[] = [];
         if (e.key in settingAction) {
