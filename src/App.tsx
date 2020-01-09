@@ -92,10 +92,8 @@ const App: React.FC<AppProps> = (props: AppProps) => {
       });
     }
     if (puppyplay(puppy)(source)()) {
-      console.log('run');
       setEditorTheme('vs');
     } else {
-      console.log('error');
       setEditorTheme('error');
     }
   };
