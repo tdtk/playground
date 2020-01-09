@@ -19,9 +19,10 @@ export const resize = (puppy: Puppy | null) => (w: number, h: number) => {
 };
 
 export const play = (puppy: Puppy | null) => (source: string) => () => {
-  if (puppy && puppy.load(source)) {
-    return true;
-  } else {
+  try {
+    return puppy && puppy.load(source);
+  } catch {
+    console.log(`Puppy Error`);
     return false;
   }
 };
