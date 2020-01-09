@@ -213,7 +213,8 @@ export const onChange = (
   setDecos: (decos: string[]) => void,
   puppy: PuppyVM | null,
   codeChangeTimer: NodeJS.Timer | null,
-  setCodeChangeTimer: React.Dispatch<React.SetStateAction<NodeJS.Timer | null>>
+  setCodeChangeTimer: React.Dispatch<React.SetStateAction<NodeJS.Timer | null>>,
+  setEditorTheme: React.Dispatch<React.SetStateAction<string>>
 ) => (source: string, _event: editor.IModelContentChangedEvent) => {
   if (codeEditor) {
     checkZenkaku(codeEditor, decos, setDecos);
@@ -225,7 +226,19 @@ export const onChange = (
   if (puppy) {
     setCodeChangeTimer(
       setTimeout(() => {
-        puppy.load(source, false);
+        try {
+          if (puppy.load(source, false)) {
+            setEditorTheme('vs');
+            return true;
+          } else {
+            setEditorTheme('error');
+            return false;
+          }
+        } catch {
+          console.log(`Puppy Error`);
+          setEditorTheme('error');
+          return false;
+        }
       }, 500)
     );
   }

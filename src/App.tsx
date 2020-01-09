@@ -92,8 +92,10 @@ const App: React.FC<AppProps> = (props: AppProps) => {
       });
     }
     if (puppyplay(puppy)(source)()) {
+      console.log('run');
       setEditorTheme('vs');
     } else {
+      console.log('error');
       setEditorTheme('error');
     }
   };
@@ -221,7 +223,8 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                 setDecos,
                 puppy,
                 codeChangeTimer,
-                setCodeChangeTimer
+                setCodeChangeTimer,
+                setEditorTheme
               )}
               editorDidMount={editorDidMount(setCodeEditor)}
               fontPlus={fontPlus(editorFontSize, setEditorFontSize)}
