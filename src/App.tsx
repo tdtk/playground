@@ -16,7 +16,7 @@ import {
   fetchSampleFromGitHub,
   fetchCoursesFromGitHub,
 } from './logic/course';
-import { PuppyOS, PuppyVM } from '@playpuppy/puppy2d';
+import { PuppyVM } from '@playpuppy/puppy2d';
 import { LineEvent, ActionEvent } from '@playpuppy/puppy2d/dist/events';
 import {
   play as puppyplay,
@@ -102,8 +102,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     fetchCoursesFromGitHub(setCourses);
     const puppyElement = document.getElementById('puppy-screen');
     if (puppyElement) {
-      const puppyOS = new PuppyOS();
-      const puppy = puppyOS.newPuppyVM(puppyElement);
+      const puppy = new PuppyVM(puppyElement);
       setPuppy(puppy);
     }
   }, []);
