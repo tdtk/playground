@@ -8,7 +8,7 @@ import {
 } from 'monaco-editor';
 import { callKoinu } from './koinu';
 import { ErrorLog, PuppyVM } from '@playpuppy/puppy2d';
-import { messagefy } from '@playpuppy/puppy2d/dist/lang/code';
+import { messagefy } from '@playpuppy/puppy2d/dist/lang/message';
 import { add_log } from './firebase/firestore';
 
 export type CodeEditor = editor.IStandaloneCodeEditor;
