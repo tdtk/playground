@@ -109,10 +109,15 @@ languages.registerCompletionItemProvider('python', {
     ];
     const python = ['input', 'print', 'len', 'range', 'int', 'float', 'str'];
     const random = ['random'];
-    const matter = ['World', 'Circle', 'Rectangle', 'Polygon', 'Label'];
+    const matter = [
+      'World',
+      'Circle',
+      'Rectangle',
+      'Polygon',
+      'Label',
+      'setGravity',
+    ];
     const parameters = [
-      'width',
-      'height',
       'isStatic',
       'restitution',
       'fillStyle',
