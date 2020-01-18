@@ -1,11 +1,12 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import google_button from './google_button.png';
 
 export type LoginProps = {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   signInByGoogle: () => Promise<void>;
+  signOut: () => Promise<void>;
 };
 
 const Login: React.FC<LoginProps> = (props: LoginProps) => {
@@ -25,6 +26,9 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
           <FormControl type="password" placeholder="password" />
           <a>Create new account</a> */}
         </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => props.signOut()}>{'サインアウト'}</Button>
+        </Modal.Footer>
       </Modal>
     </>
   );

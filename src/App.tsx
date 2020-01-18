@@ -37,7 +37,7 @@ import {
 } from './logic/editor';
 import { submitCommand } from './logic/setting';
 import { AutoPlayer } from './logic/autoplay';
-import { signInByGoogle } from './logic/firebase/auth';
+import { signInByGoogle, getCurrentUser, signOut } from './logic/firebase/auth';
 
 type AppProps = { qs: QueryParams; hash: string };
 
@@ -170,6 +170,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
           setIsShowVersion={setIsShowVersion}
           setIsShowSetting={() => setIsShowSetting(true)}
           setIsShowLogin={() => setIsShowLogin(true)}
+          getCurrentUser={getCurrentUser}
         />
         <Version show={isShowVersion} setShow={setIsShowVersion} />
         <Setting
@@ -183,6 +184,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
           show={isShowLogin}
           setShow={setIsShowLogin}
           signInByGoogle={() => signInByGoogle(puppy, setIsShowLogin)}
+          signOut={signOut}
         />
         <Row id="main-row">
           <Col id="left-col" xs={6}>

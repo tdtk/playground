@@ -23,3 +23,7 @@ export const signInByGoogle = (
         uid: result.user!.uid!,
       });
     });
+
+export const getCurrentUser = () => firebase.auth().currentUser;
+
+export const signOut = () => firebase.auth().signOut();
