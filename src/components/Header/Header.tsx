@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { CourseShape } from '../../logic/course';
 import { faCog, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +14,18 @@ export type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
+  const [sortedCourses, setSortedCourses] = useState([] as [
+    string,
+    CourseShape
+  ][]);
+  useEffect(() => {
+    const sorted_keys = Object.keys(props.courses).sort();
+    const sc: [string, CourseShape][] = [];
+    for (const key of sorted_keys) {
+      sc.push([key, props.courses[key]]);
+    }
+    setSortedCourses(sc);
+  }, [props.courses]);
   return (
     <div className="Header" id="puppy-header">
       <Navbar bg="white" variant="light" expand="lg">
@@ -28,8 +40,8 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
         </Navbar.Brand>
         <Nav className="mr-auto">
           <NavDropdown title={'Courseware'} id="nav-dropdown-courses">
-            {Object.keys(props.courses).map(course_path => {
-              const course = props.courses[course_path];
+            {sortedCourses.map(c => {
+              const [course_path, course] = c;
               return (
                 <NavDropdown
                   title={course.title}

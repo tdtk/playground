@@ -220,7 +220,8 @@ export const onChange = (
   puppy: PuppyVM | null,
   codeChangeTimer: NodeJS.Timer | null,
   setCodeChangeTimer: React.Dispatch<React.SetStateAction<NodeJS.Timer | null>>,
-  setEditorTheme: React.Dispatch<React.SetStateAction<string>>
+  setEditorTheme: React.Dispatch<React.SetStateAction<string>>,
+  saveSessionStorage: (source: string) => void
 ) => (source: string, _event: editor.IModelContentChangedEvent) => {
   if (codeEditor) {
     checkZenkaku(codeEditor, decos, setDecos);
@@ -232,6 +233,7 @@ export const onChange = (
   if (puppy) {
     setCodeChangeTimer(
       setTimeout(() => {
+        saveSessionStorage(source);
         try {
           if (puppy.load(source, false)) {
             setEditorTheme('vs');

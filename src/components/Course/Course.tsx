@@ -20,6 +20,7 @@ type CourseProps = {
   play: (source: string) => () => void;
   fetchContent: (coursePath: string, path: string) => void;
   fetchSample: (coursePath: string, path: string) => Promise<string>;
+  setVisible: (visible: boolean) => void;
 };
 
 const Course: React.FC<CourseProps> = (props: CourseProps) => {
@@ -29,6 +30,7 @@ const Course: React.FC<CourseProps> = (props: CourseProps) => {
       props
         .fetchSample(props.coursePath, props.course.list[props.page].path)
         .then((source: string) => {
+          props.setVisible(true);
           props.play(source)();
         });
     }

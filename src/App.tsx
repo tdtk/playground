@@ -68,6 +68,15 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   );
   const [isShowLogin, setIsShowLogin] = useState(false);
 
+  const saveSessionStorage = (source: string) => {
+    if (course.list.length !== 0) {
+      sessionStorage.setItem(
+        `${coursePath}${course.list[page].path}/sample.py`,
+        source
+      );
+    }
+  };
+
   const autoPlayFunc = () => {
     const page =
       window.location.hash !== ''
@@ -76,12 +85,6 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     window.location.hash = `#${page === course.list.length - 1 ? 0 : page + 1}`;
   };
   const play = (puppy: PuppyVM | null) => (source: string) => () => {
-    if (course.list.length !== 0) {
-      sessionStorage.setItem(
-        `${coursePath}${course.list[page].path}/sample.py`,
-        source
-      );
-    }
     setConsoleValue([]);
     if (codeEditor) {
       codeEditor.setSelection({
@@ -192,6 +195,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               play={play(puppy)}
               fetchContent={fetchTextFromGitHub(setCourseContent)}
               fetchSample={fetchSampleFromGitHub(setSource)}
+              setVisible={setIsCourseVisible}
             />
             <PuppyScreen
               isCourseVisible={isCourseVisible}
@@ -202,7 +206,10 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               play={
                 isAutoPlay
                   ? () => autoPlayer.play(autoPlayFunc)
-                  : play(puppy)(source)
+                  : () => {
+                      setIsCourseVisible(false);
+                      return play(puppy)(source);
+                    }
               }
               fullscreen={fullscreen(puppy)}
               setSize={resize(puppy)}
@@ -221,7 +228,8 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                 puppy,
                 codeChangeTimer,
                 setCodeChangeTimer,
-                setEditorTheme
+                setEditorTheme,
+                saveSessionStorage
               )}
               editorDidMount={editorDidMount(setCodeEditor)}
               fontPlus={fontPlus(editorFontSize, setEditorFontSize)}
