@@ -139,7 +139,7 @@ export const fetchSetting = (setCourse: (course: CourseShape) => void) => (
       console.log(`ERR ${msg}`);
     });
 
-export const fetchContent = (setContent: (content: string) => void) => (
+export const fetchText = (setContent: (content: string) => void) => (
   coursePath: string,
   path: string
 ): Promise<void> =>
@@ -168,12 +168,13 @@ export const fetchSample = (setSource: (source: string) => void) => (
 
 export const fetchCourses = (setCourses: (courses: Courses) => void) => {
   const courses: Courses = {};
-  const get_course: Promise<void>[] = ['NLP'].map((courseName: string) =>
-    loadFile(`/course/${courseName}/setting.json`)
-      .then((s: string) => JSON.parse(s))
-      .then((course: CourseShape) => {
-        courses[courseName] = course;
-      })
+  const get_course: Promise<void>[] = ['PuppyCourse2'].map(
+    (courseName: string) =>
+      loadFile(`/course/${courseName}/setting.json`)
+        .then((s: string) => JSON.parse(s))
+        .then((course: CourseShape) => {
+          courses[courseName] = course;
+        })
   );
   Promise.all(get_course).then(() => setCourses(courses));
 };

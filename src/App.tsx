@@ -12,9 +12,9 @@ import { QueryParams } from './index';
 import {
   Courses,
   CourseShape,
-  fetchTextFromGitHub,
-  fetchSampleFromGitHub,
-  fetchCoursesFromGitHub,
+  fetchText,
+  fetchSample,
+  fetchCourses,
 } from './logic/course';
 import { PuppyVM } from '@playpuppy/puppy2d';
 import { LineEvent, ActionEvent } from '@playpuppy/puppy2d/dist/events';
@@ -42,7 +42,7 @@ import { signInByGoogle, signOut, getCurrentUser } from './logic/firebase/auth';
 type AppProps = { qs: QueryParams; hash: string };
 
 const App: React.FC<AppProps> = (props: AppProps) => {
-  const coursePath = props.qs.course ? props.qs.course : 'course/TronShow';
+  const coursePath = props.qs.course ? props.qs.course : 'PuppyCourse2';
   const page = props.hash !== '' ? parseInt(props.hash.substr(1)) : 0;
   const [courses, setCourses] = useState({} as Courses);
   const [isShowVersion, setIsShowVersion] = useState(false);
@@ -121,7 +121,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   };
 
   useEffect(() => {
-    fetchCoursesFromGitHub(setCourses);
+    fetchCourses(setCourses);
     const puppyElement = document.getElementById('puppy-screen');
     if (puppyElement) {
       const puppy = new PuppyVM(puppyElement);
@@ -216,8 +216,8 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               content={courseContent}
               visible={isCourseVisible}
               play={play(puppy)}
-              fetchContent={fetchTextFromGitHub(setCourseContent)}
-              fetchSample={fetchSampleFromGitHub(setSource)}
+              fetchContent={fetchText(setCourseContent)}
+              fetchSample={fetchSample(setSource)}
               setVisible={setIsCourseVisible}
             />
             <PuppyScreen

@@ -1,0 +1,33 @@
+{
+  "title": "Puppy Course",
+  "list": [
+    {
+      "path": "/Welcome",
+      "title": "ようこそ"
+    },
+    {
+      "path": "/Hello",
+      "title": "Hello World"
+    },
+    {
+      "path": "/Number",
+      "title": "数と計算"
+    },
+    {
+      "path": "/PuppyObject",
+      "title": "円や四角を表示させてみよう"
+    },
+    {
+      "path": "/Simulation",
+      "title": "弾むボール"
+    },
+    {
+      "path": "/For",
+      "title": "繰り返し"
+    },
+    {
+      "path": "/Domino",
+      "title": "ドミノ"
+    }
+  ]
+}
