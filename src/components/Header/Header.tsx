@@ -4,15 +4,14 @@ import { CourseShape } from '../../logic/course';
 import { faCog, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'react-bootstrap';
-import { User } from 'firebase';
 import './Header.css';
 
 export type HeaderProps = {
   courses: { [path: string]: CourseShape };
+  userName: string;
   setIsShowVersion: (isShow: boolean) => void;
   setIsShowSetting: () => void;
   setIsShowLogin: () => void;
-  getCurrentUser: () => User | null;
 };
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
@@ -28,14 +27,6 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     }
     setSortedCourses(sc);
   }, [props.courses]);
-  const getUserName = () => {
-    const user = props.getCurrentUser();
-    if (user && user.displayName) {
-      return user.displayName;
-    } else {
-      return 'ゲスト';
-    }
-  };
   return (
     <div className="Header" id="puppy-header">
       <Navbar bg="white" variant="light" expand="lg">
@@ -77,7 +68,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
         <div className="header-buttons">
           <Button className="puppy-background" onClick={props.setIsShowLogin}>
             <FontAwesomeIcon icon={faUser} />
-            {` ${getUserName()}`}
+            {` ${props.userName}`}
           </Button>
           <Button className="puppy-background" onClick={props.setIsShowSetting}>
             <FontAwesomeIcon icon={faCog} />

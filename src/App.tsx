@@ -37,7 +37,7 @@ import {
 } from './logic/editor';
 import { submitCommand } from './logic/setting';
 import { AutoPlayer } from './logic/autoplay';
-import { signInByGoogle, getCurrentUser, signOut } from './logic/firebase/auth';
+import { signInByGoogle, signOut, getCurrentUser } from './logic/firebase/auth';
 
 type AppProps = { qs: QueryParams; hash: string };
 
@@ -67,6 +67,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     null as NodeJS.Timer | null
   );
   const [isShowLogin, setIsShowLogin] = useState(false);
+  const [userName, setUserName] = useState('ゲスト');
 
   const saveSessionStorage = (source: string) => {
     if (course.list.length !== 0) {
@@ -99,6 +100,24 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     } else {
       setEditorTheme('error');
     }
+  };
+
+  const signInWithSetName = (method: () => Promise<void>) => () => {
+    return method().then(() => {
+      const user = getCurrentUser();
+      if (user && user.displayName) {
+        setUserName(user.displayName);
+      } else {
+        setUserName('ゲスト');
+      }
+    });
+  };
+
+  const signOutAndSetName = () => {
+    setIsShowLogin(false);
+    return signOut().then(() => {
+      setUserName('ゲスト');
+    });
   };
 
   useEffect(() => {
@@ -167,10 +186,10 @@ const App: React.FC<AppProps> = (props: AppProps) => {
       <Container className="container">
         <Header
           courses={courses}
+          userName={userName}
           setIsShowVersion={setIsShowVersion}
           setIsShowSetting={() => setIsShowSetting(true)}
           setIsShowLogin={() => setIsShowLogin(true)}
-          getCurrentUser={getCurrentUser}
         />
         <Version show={isShowVersion} setShow={setIsShowVersion} />
         <Setting
@@ -183,8 +202,10 @@ const App: React.FC<AppProps> = (props: AppProps) => {
         <Login
           show={isShowLogin}
           setShow={setIsShowLogin}
-          signInByGoogle={() => signInByGoogle(puppy, setIsShowLogin)}
-          signOut={signOut}
+          signInByGoogle={signInWithSetName(() =>
+            signInByGoogle(puppy, setIsShowLogin)
+          )}
+          signOut={signOutAndSetName}
         />
         <Row id="main-row">
           <Col id="left-col" xs={6}>
