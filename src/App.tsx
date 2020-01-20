@@ -210,7 +210,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                   ? () => autoPlayer.play(autoPlayFunc)
                   : () => {
                       setIsCourseVisible(false);
-                      return play(puppy)(source);
+                      return play(puppy)(source)();
                     }
               }
               fullscreen={fullscreen(puppy)}
