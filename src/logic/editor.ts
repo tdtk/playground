@@ -297,7 +297,6 @@ export const ErrorLogs2Markers = (logs: ErrorLog[]): editor.IMarkerData[] =>
     endLineNumber: log.row! + 1,
     endColumn: log.col! + log.len!,
     code: log.key,
-    source: log.subject ? log.subject : '',
     message: messagefy(log),
   }));
 
