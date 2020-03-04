@@ -17,7 +17,7 @@ import {
   fetchCourses,
 } from './logic/course';
 import { PuppyVM } from '@playpuppy/puppy2d';
-import { LineEvent, ActionEvent } from '@playpuppy/puppy2d/dist/events';
+import { LineEvent, ActionEvent } from '@playpuppy/puppy2d/dist/puppyos/events';
 import {
   play as puppyplay,
   fullscreen,

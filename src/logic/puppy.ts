@@ -1,5 +1,5 @@
 import { PuppyVM as Puppy } from '@playpuppy/puppy2d';
-import { OutputEvent } from '@playpuppy/puppy2d/dist/events';
+import { OutputEvent } from '@playpuppy/puppy2d/dist/puppyos/events';
 import { add_log } from './firebase/firestore';
 
 export type StringElement = {
