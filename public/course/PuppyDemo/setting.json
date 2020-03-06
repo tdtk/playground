@@ -1,0 +1,25 @@
+{
+    "title": "Puppy Demo",
+    "list": [
+      {
+        "path": "/Domino",
+        "title": "ドミノ"
+      },
+      {
+        "path": "/Tapi",
+        "title": "タピオカ"
+      },
+      {
+        "path": "/Bowling",
+        "title": "ボーリング"
+      },
+      {
+        "path": "/KoroKoro",
+        "title": "ボールコロコロ"
+      },
+      {
+        "path": "/Functions",
+        "title": "キーボードと衝突、変数値の表示"
+      }
+    ]
+  }

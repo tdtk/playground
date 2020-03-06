@@ -168,7 +168,7 @@ export const fetchSample = (setSource: (source: string) => void) => (
 
 export const fetchCourses = (setCourses: (courses: Courses) => void) => {
   const courses: Courses = {};
-  const get_course: Promise<void>[] = ['PuppyCourse2'].map(
+  const get_course: Promise<void>[] = ['PuppyDemo', 'PuppyCourse2'].map(
     (courseName: string) =>
       loadFile(`/course/${courseName}/setting.json`)
         .then((s: string) => JSON.parse(s))

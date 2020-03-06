@@ -42,7 +42,7 @@ import { signInByGoogle, signOut, getCurrentUser } from './logic/firebase/auth';
 type AppProps = { qs: QueryParams; hash: string };
 
 const App: React.FC<AppProps> = (props: AppProps) => {
-  const coursePath = props.qs.course ? props.qs.course : 'PuppyCourse2';
+  const coursePath = props.qs.course ? props.qs.course : 'PuppyDemo';
   const page = props.hash !== '' ? parseInt(props.hash.substr(1)) : 0;
   const [courses, setCourses] = useState({} as Courses);
   const [isShowVersion, setIsShowVersion] = useState(false);
